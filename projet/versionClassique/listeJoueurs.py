@@ -33,7 +33,7 @@ def ajouterJoueur(joueurs, joueur):
                 joueur le joueur à ajouter
     cette fonction ne retourne rien mais modifie la liste des joueurs
     """
-    joueurs[len(joueurs)] = joueur
+    joueurs[0][len(joueurs)] = joueur
 
 def initAleatoireJoueurCourant(joueurs):
     """
@@ -98,7 +98,7 @@ def nbTresorsRestantsJoueur(joueurs,numJoueur):
                 numJoueur le numéro du joueur
     résultat: le nombre de trésors que joueur numJoueur doit encore trouver
     """
-    return len(joueurs[0][joueurs[1]][1])
+    return len(joueurs[0][numJoueur][1])
 
 def numJoueurCourant(joueurs):
     """
@@ -132,7 +132,7 @@ def prochainTresorJoueur(joueurs,numJoueur):
                 numJoueur le numéro du joueur    
     résultat: le prochain trésor du joueur numJoueur (un entier)
     """
-    return joueurs[0][numJoueur][1][0]
+    return joueurs[0][numJoueur][1][0] #je suppose que le tresor courant est le premier trésor de la liste 
 
 def tresorCourant(joueurs):
     """
