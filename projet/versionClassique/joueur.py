@@ -36,14 +36,11 @@ def prochainTresor(joueur):
         joueur le joueur
     résultat un entier représentant le trésor ou None
     """
-    for i in range(len(joueur[1])):
-    	if joueur[1][i+1] > len(joueur[1]):
-    		return None
-    	else:
-    		return joueur[1][i+1]
-
-
-
+    if joueur[1] == []:
+    	return None
+    else:
+    	return joueur[1][0]
+    	
 def tresorTrouve(joueur):
     """ 
     enleve le premier trésor à trouver car le joueur l'a trouvé
@@ -51,9 +48,7 @@ def tresorTrouve(joueur):
         joueur le joueur
     la fonction ne retourne rien mais modifie le joueur
     """
-    (_,liste)=joueur
-    for i in range (len(liste)):
-    	del(liste[0])
+    joueur[1].pop(0)
 
 def getNbTresorsRestants(joueur):
     """
