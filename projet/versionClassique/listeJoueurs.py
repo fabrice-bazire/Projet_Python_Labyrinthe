@@ -55,6 +55,7 @@ def distribuerTresors(joueurs,nbTresors=24, nbTresorMax=0):
                              de trésor possible  
     cette fonction ne retourne rien mais modifie la liste des joueurs
     """
+    #distribuer les trésors : parcourir le nbtresors et attribuer à un joueur aleatoirement si ce joueur a moins de nbtresormax 
     pass
 
 def changerJoueurCourant(joueurs):
@@ -88,7 +89,7 @@ def joueurCourantTrouveTresor(joueurs):
     paramètre: joueurs la liste des joueurs
     cette fonction ne retourne rien mais modifie la liste des joueurs
     """
-    joueurs[0][joueurs[1]][1].pop(le_trésor) #Mais quel est le trésor a retirer ???
+    tresorTrouve(getJoueurCourant(joueurs))
 
 def nbTresorsRestantsJoueur(joueurs,numJoueur):
     """
@@ -114,7 +115,7 @@ def nomJoueurCourant(joueurs):
     paramètre: joueurs la liste des joueurs
     résultat: le nom du joueur courant
     """
-    return joueurs[0][joueurs[1]][0]
+    return getJoueurCourant(joueurs)[0]
 
 def nomJoueur(joueurs,numJoueur):
     """
@@ -140,7 +141,7 @@ def tresorCourant(joueurs):
     paramètre: joueurs la liste des joueurs 
     résultat: le prochain trésor du joueur courant (un entier)
     """
-    return joueurs[0][joueurs[1]][1][0]
+    return getJoueurCourant(joueurs)[1][0]
 
 def joueurCourantAFini(joueurs):
     """
@@ -148,4 +149,4 @@ def joueurCourantAFini(joueurs):
     paramètre: joueurs la liste des joueurs 
     résultat: un booleen indiquant si le joueur courant a fini
     """
-    return joueurs[0][joueurs[1]][1] == []
+    return getJoueurCourant(joueurs)[1] == []
