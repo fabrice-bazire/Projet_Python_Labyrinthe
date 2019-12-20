@@ -23,7 +23,7 @@ def ListeJoueurs(nomsJoueurs):
     for joueur in nomsJoueurs :
         les_joueurs[cpt] = Joueur(joueur) #cpt est le numéro du joueur que l'on ajoute à la liste
         cpt += 1
-    return (les_joueurs, 0) #ici 0 represente le numéro du joueur courant
+    return [les_joueurs, 0] #ici 0 represente le numéro du joueur courant
     
 
 def ajouterJoueur(joueurs, joueur):
@@ -33,7 +33,7 @@ def ajouterJoueur(joueurs, joueur):
                 joueur le joueur à ajouter
     cette fonction ne retourne rien mais modifie la liste des joueurs
     """
-    joueurs[0][len(joueurs)] = joueur
+    joueurs[0][len(joueurs[0])] = joueur
 
 def initAleatoireJoueurCourant(joueurs):
     """
@@ -41,7 +41,7 @@ def initAleatoireJoueurCourant(joueurs):
     paramètre: joueurs une liste de joueurs
     cette fonction ne retourne rien mais modifie la liste des joueurs
     """
-    joueurs[1] = random.randint(0,len(joueurs) - 1)
+    joueurs[1] = random.randint(0,len(joueurs[0]) - 1)
 
 def distribuerTresors(joueurs,nbTresors=24, nbTresorMax=0):
     """
@@ -56,7 +56,9 @@ def distribuerTresors(joueurs,nbTresors=24, nbTresorMax=0):
     cette fonction ne retourne rien mais modifie la liste des joueurs
     """
     #distribuer les trésors : parcourir le nbtresors et attribuer à un joueur aleatoirement si ce joueur a moins de nbtresormax 
-    pass
+    for tresor in range(1, nbTresors, 1) :
+        if len(joueurs[0][random.randint(1,4)][1]) < nbTresorMax :
+            joueurs[0][random.randint(1,4)][1].append(tresor)
 
 def changerJoueurCourant(joueurs):
     """
@@ -64,7 +66,7 @@ def changerJoueurCourant(joueurs):
     paramètres: joueurs la liste des joueurs
     cette fonction ne retourne rien mais modifie la liste des joueurs
     """   
-    joueurs[1] = (joueurs[1] + 1) % len(joueurs)
+    joueurs[1] = (joueurs[1] + 1) % len(joueurs[0])
 
 def getNbJoueurs(joueurs):
     """
@@ -89,7 +91,8 @@ def joueurCourantTrouveTresor(joueurs):
     paramètre: joueurs la liste des joueurs
     cette fonction ne retourne rien mais modifie la liste des joueurs
     """
-    tresorTrouve(getJoueurCourant(joueurs))
+    if getJoueurCourant(joueurs)[0] != [] :
+        tresorTrouve(getJoueurCourant(joueurs))
 
 def nbTresorsRestantsJoueur(joueurs,numJoueur):
     """

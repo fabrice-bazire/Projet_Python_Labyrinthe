@@ -48,7 +48,8 @@ def tresorTrouve(joueur):
         joueur le joueur
     la fonction ne retourne rien mais modifie le joueur
     """
-    joueur[1].pop(0)
+    if joueur[1] != []:
+        joueur[1].pop(0)
 
 def getNbTresorsRestants(joueur):
     """
