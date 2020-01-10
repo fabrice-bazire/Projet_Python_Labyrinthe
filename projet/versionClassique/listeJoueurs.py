@@ -57,8 +57,27 @@ def distribuerTresors(joueurs,nbTresors=24, nbTresorMax=0):
     """
     #distribuer les trésors : parcourir le nbtresors et attribuer à un joueur aleatoirement si ce joueur a moins de nbtresormax 
     for tresor in range(1, nbTresors, 1) :
-        if len(joueurs[0][random.randint(1,4)][1]) < nbTresorMax :
-            joueurs[0][random.randint(1,4)][1].append(tresor)
+        joueur_random = random.randint(1,getNbJoueurs(joueurs))
+        if nbTresorMax != 0 :
+            if getNbJoueurs(joueurs) == 2 :
+                if len(joueurs[0][joueur_random][1]) < nbTresorMax and len(joueurs[0][0][1]) == len(joueurs[0][1][1]):
+                    joueurs[0][joueur_random][1].append(tresor)
+            if getNbJoueurs(joueurs) == 3 :
+                if len(joueurs[0][joueur_random][1]) < nbTresorMax and len(joueurs[0][0][1]) == len(joueurs[0][1][1]) and len(joueurs[0][0][1]) == len(joueurs[0][2][1]) :
+                    joueurs[0][joueur_random][1].append(tresor)
+            if getNbJoueurs(joueurs) == 4 :
+                if len(joueurs[0][joueur_random][1]) < nbTresorMax and len(joueurs[0][0][1]) == len(joueurs[0][1][1]) and len(joueurs[0][0][1]) == len(joueurs[0][2][1]) and len(joueurs[0][0][1]) == len(joueurs[0][3][1]) :                    
+                    joueurs[0][joueur_random][1].append(tresor)
+        else : 
+            if getNbJoueurs(joueurs) == 2 :
+                if len(joueurs[0][joueur_random][1]) < nbTresor / getNbJoueurs(joueurs) and len(joueurs[0][0][1]) == len(joueurs[0][1][1]):
+                    joueurs[0][joueur_random][1].append(tresor)
+            if getNbJoueurs(joueurs) == 3 :
+                if len(joueurs[0][joueur_random][1]) < nbTresor / getNbJoueurs(joueurs) and len(joueurs[0][0][1]) == len(joueurs[0][1][1]) and len(joueurs[0][0][1]) == len(joueurs[0][2][1]) :
+                    joueurs[0][joueur_random][1].append(tresor)
+            if getNbJoueurs(joueurs) == 4 :
+                if len(joueurs[0][joueur_random][1]) < nbTresor / getNbJoueurs(joueurs) and len(joueurs[0][0][1]) == len(joueurs[0][1][1]) and len(joueurs[0][0][1]) == len(joueurs[0][2][1]) and len(joueurs[0][0][1]) == len(joueurs[0][3][1]) :                    
+                    joueurs[0][joueur_random][1].append(tresor)
 
 def changerJoueurCourant(joueurs):
     """
@@ -110,7 +129,7 @@ def numJoueurCourant(joueurs):
     paramètre: joueurs la liste des joueurs
     résultat: le numéro du joueur courant
     """
-    return joueurs[1]
+    return joueurs[1]+1
 
 def nomJoueurCourant(joueurs):
     """
