@@ -190,6 +190,6 @@ def affiche_matrice(matrice,tailleCellule=4):
 
 #affiche_matrice(matrice)
 
-#decalageColonneEnHaut(matrice,4,917)
+#print(decalageColonneEnHaut(matrice,4,917))
 
 #affiche_matrice(matrice)
