@@ -190,30 +190,20 @@ def marquageDirect(calque,plateau,val,marque):
 
         for j in range(nbCol):
 
-            if getVal(plateau[0],i,j)!=1 and getVal(calque,i,j) == 0:
-                
-                # Vérification voisin du dessous
-                if i<nbLigne-1 and getVal(calque,i+1,j) == val :
-                        setVal(calque,i,j,marque)
-                        estMarqué = True
+            # Vérification voisin du dessous
+            #positionActuel = (i,j)
+            getVal(plateau[0],i,j)
+            if passageSud(getVal(plateau[0],i,j),getVal(plateau[0],i,j+1)):
+                #effectué marquage
+                #positionActuel = position de la carte sud
 
-                # Vérification voisin du dessus
-                if i-1>=0 and getVal(calque,i-1,j) == val :
-                        setVal(calque,i,j,marque)
-                        estMarqué = True
+            # Vérification voisin du dessus
+            
 
-                # Vérification voisin de droite
-                if j<nbCol-1 and getVal(calque,i,j+1) == val :
-                        setVal(calque,i,j,marque)
-                        estMarqué = True
+            # Vérification voisin de droite
+            
 
-                # Vérification voisin de gauche
-                if j-1>=0 and getVal(calque,i,j-1) == val :
-                        setVal(calque,i,j,marque)
-                        estMarqué = True
+            # Vérification voisin de gauche
+            
 
     return estMarqué
-
-
-plateau = Plateau(4,24)
-print(accessible(plateau,1,1,6,8))
