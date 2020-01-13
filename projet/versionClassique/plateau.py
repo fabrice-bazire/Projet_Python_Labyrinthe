@@ -22,7 +22,11 @@ def Plateau(nbJoueurs, nbTresors):
                 ont été placée de manière aléatoire
               - la carte amovible qui n'a pas été placée sur le plateau
     """
-    pass
+    plateau = Matrice(7,7)
+    for ligne in range(7) : 
+        for colonne in range(7):
+            carte = Carte(bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),)
+            setVal(plateau,ligne,colonne,carte)
 
 
 

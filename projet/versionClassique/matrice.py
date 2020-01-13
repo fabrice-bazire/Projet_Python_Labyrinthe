@@ -23,21 +23,25 @@ def Matrice(nbLignes,nbColonnes,valeurParDefaut=0):
       valeurParDefaut la valeur par défaut
     résultat la matrice ayant les bonnes propriétés
     """
-    pass
+    matrice = []
+    for indice_ext in range(nbLignes):
+        matrice.append([valeurParDefaut]*nbColonnes)
+    return matrice
 
 def getNbLignes(matrice):
     """
     retourne le nombre de lignes de la matrice
     paramètre: matrice la matrice considérée
     """
-    pass
+    return len(matrice)
 
 def getNbColonnes(matrice):
     """
-    retourne le nombre de colonnes de la matrice
-    paramètre: matrice la matrice considérée
+    retosetVal(matrice,ligne,colonne,valeur) colonnes de la matrice
+    parasetVal(matrice,ligne,colonne,valeur) matrice considérée
     """
-    pass
+    #passsetVal(matrice,ligne,colonne,valeur)
+    return len(matrice[0])
 
 def getVal(matrice,ligne,colonne):
     """
@@ -46,9 +50,9 @@ def getVal(matrice,ligne,colonne):
                 ligne le numéro de la ligne (en commençant par 0)
                 colonne le numéro de la colonne (en commençant par 0)
     """
-    pass
+    return matrice[ligne][colonne]
 
-def setVal(matrice,ligne,colonne,valeur):
+def setVal(matrice,lig,col,val):
     """
     met la valeur dans la case se trouve en (ligne,colonne) de la matrice
     paramètres: matrice la matrice considérée
@@ -57,7 +61,7 @@ def setVal(matrice,ligne,colonne,valeur):
                 valeur la valeur à stocker dans la matrice
     cette fonction ne retourne rien mais modifie la matrice
     """
-    pass
+    matrice[lig][col] = val
 
 
 #------------------------------------------        
