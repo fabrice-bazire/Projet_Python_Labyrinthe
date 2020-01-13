@@ -22,26 +22,46 @@ def Plateau(nbJoueurs, nbTresors):
                 ont été placée de manière aléatoire
               - la carte amovible qui n'a pas été placée sur le plateau
     """
+    def attribuer_tresor(les_tresors_affectes, nbTresors) :
+        tresor = random.randint(0,nbTresors)
+        while tresor in les_tresors_affectes and tresor != 0 :
+            if len(les_tresors_affectes) == nbTresors :
+                tresor = 0
+            else : 
+                tresor = random.randint(0,nbTresors)
+            les_tresors_affectes.add(tresor)
+        return tresor
     les_tresors_affectes = set()
     plateau = Matrice(7,7)
     for ligne in range(7) : 
         for colonne in range(7):
-            tresor = random.randint(0,nbTresors)
-            while tresor in les_tresors_affectes and tresor != 0 :
-                if len(les_tresors_affectes) == nbTresors :
-                    tresor = 0
-                else : 
-                    tresor = random.randint(0,nbTresors)
-            les_tresors_affectes.add(tresor)
-            carte = Carte(bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),tresor, [])
-            setVal(plateau,ligne,colonne,carte)
-    tresor_am = random.randint(0,49)
+            if ligne % 2 == 1 or colonne % 2 == 1 :
+                tresor = attribuer_tresor(les_tresors_affectes, nbTresors)
+                carte = Carte(bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),tresor)
+                setVal(plateau,ligne,colonne,carte)
+    setVal(plateau,0,0,Carte(True, False, False, True)
+    setVal(plateau,0,6,Carte(True, True, False, False)
+    setVal(plateau,6,0,Carte(False, False, True, True)
+    setVal(plateau,6,6,Carte(False, True, True, False)
+    setVal(plateau, 0, 2, Carte(True, False, False, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 0, 4, Carte(True, False, False, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 2, 4, Carte(True, False, False, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 2, 0, Carte(False, False, False, True, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 2, 2, Carte(False, False, False, True, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 2, 4, Carte(False, False, False, True, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 2, 6, Carte(False, True, False, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 4, 6, Carte(False, True, False, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 4, 4, Carte(False, True, False, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 4, 2, Carte(False, False, True, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 6, 2, Carte(False, False, True, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 6, 4, Carte(False, False, True, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    tresor_am = random.randint(0,nbTresors)
     while tresor in les_tresors_affectes and tresor != 0 :
                 if len(les_tresors_affectes) == nbTresors :
                     tresor_am = 0
                 else : 
-                    tresor_am = random.randint(0,49)
-    carte_amovible = Carte(bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),tresor, [])
+                    tresor_am = random.randint(0,nbTresors)
+    carte_amovible = Carte(bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),tresor)
     plateau[0][0]['pions'].append(1)
     if nbJoueurs > 1 :
         plateau[0][6]['pions'].append(2)
@@ -141,7 +161,65 @@ def accessible(plateau,ligD,colD,ligA,colA):
     résultat: un boolean indiquant s'il existe un chemin entre la case de départ
               et la case d'arrivée
     """
-    pass
+    nbLigne = getNbLignes(plateau[0])
+    nbCol = getNbColonnes(plateau[0])
+    calque=Matrice(nbLigne,nbCol)
+    setVal(calque,ligD,colD,1)
+
+    estMarqué = True
+
+    while estMarqué:
+        estMarqué = marquageDirect(calque,plateau[0],1,1)
+
+    if getVal(calque,ligD,colD) > 0 and getVal(calque,ligA,colA) > 0 :
+        return True
+    else:
+        return False
+
+
+def marquageDirect(calque,plateau,val,marque):
+    '''
+    marque avec la valeur marque les éléments du calque tel que la valeur 
+    correspondante n'est pas un mur (de valeur differente de 1) et 
+    qu'un de ses voisins dans le calque à pour valeur val
+    la fonction doit retourner True si au moins une case du calque a été marquée
+    '''
+    nbLigne = getNbLignes(plateau[0])
+    nbCol = getNbColonnes(plateau[0])
+    estMarqué = False
+
+    for i in range (nbLigne):
+
+        for j in range(nbCol):
+
+            if getVal(plateau[0],i,j)!=1 and getVal(calque,i,j) == 0:
+                
+                # Vérification voisin du dessous
+                if i<nbLigne-1 and getVal(calque,i+1,j) == val :
+                        setVal(calque,i,j,marque)
+                        estMarqué = True
+
+                # Vérification voisin du dessus
+                if i-1>=0 and getVal(calque,i-1,j) == val :
+                        setVal(calque,i,j,marque)
+                        estMarqué = True
+
+                # Vérification voisin de droite
+                if j<nbCol-1 and getVal(calque,i,j+1) == val :
+                        setVal(calque,i,j,marque)
+                        estMarqué = True
+
+                # Vérification voisin de gauche
+                if j-1>=0 and getVal(calque,i,j-1) == val :
+                        setVal(calque,i,j,marque)
+                        estMarqué = True
+
+    return estMarqué
+
+
+plateau = Plateau(4,24)
+print(str(accessible(plateau,1,1,6,8)))
+
 
 def accessibleDist(plateau,ligD,colD,ligA,colA):
     """
@@ -158,3 +236,4 @@ def accessibleDist(plateau,ligD,colD,ligA,colA):
               de départ et la case d'arrivée
     """
     pass
+
