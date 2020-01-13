@@ -73,7 +73,11 @@ def prendreTresorPlateau(plateau,lig,col,numTresor):
                 numTresor: le numéro du trésor à prendre sur la carte
     resultat: un booléen indiquant si le trésor était bien sur la carte considérée
     """
-    pass
+    if plateau[0][lig][col]['tresor'] == numTresor : 
+        plateau[0][lig][col]['tresor'] = 0
+        return True
+    else : 
+        return False
 
 def getCoordonneesTresor(plateau,numTresor):
     """
