@@ -83,7 +83,11 @@ def getCoordonneesTresor(plateau,numTresor):
     resultat: un couple d'entier donnant les coordonnées du trésor ou None si
               le trésor n'est pas sur le plateau
     """
-    pass
+    for ligne in range(7):
+        for colonne in range(7):
+            if plateau[0][ligne][colonne]['tresor'] == numTresor :
+                return (ligne, colonne)
+    return None
 
 def getCoordonneesJoueur(plateau,numJoueur):
     """
@@ -93,7 +97,11 @@ def getCoordonneesJoueur(plateau,numJoueur):
     resultat: un couple d'entier donnant les coordonnées du joueur ou None si
               le joueur n'est pas sur le plateau
     """
-    pass
+    for ligne in range(7):
+        for colonne in range(7):
+            if numJoueur in plateau[0][ligne][colonne]['pions']:
+                return (ligne, colonne)
+    return None
 
 def prendrePionPlateau(plateau,lin,col,numJoueur):
     """
@@ -104,7 +112,7 @@ def prendrePionPlateau(plateau,lin,col,numJoueur):
                 numJoueur: le numéro du joueur qui correspond au pion
     Cette fonction ne retourne rien mais elle modifie le plateau
     """
-    pass
+    plateau[0][lin][col]['pions'].pop(numJoueur)
 
 def poserPionPlateau(plateau,lin,col,numJoueur):
     """
@@ -115,7 +123,7 @@ def poserPionPlateau(plateau,lin,col,numJoueur):
                 numJoueur: le numéro du joueur qui correspond au pion
     Cette fonction ne retourne rien mais elle modifie le plateau
     """
-    pass
+    plateau[0][lin][col]['pions'].append(numJoueur)
 
 
 def accessible(plateau,ligD,colD,ligA,colA):
