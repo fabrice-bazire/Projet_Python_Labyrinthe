@@ -1,2 +1,4 @@
 Github => 30 minutes
 joueur => 1h30
+debug => listeJoueur => 1h30
+matrice.py => 8h40 a 10h40
