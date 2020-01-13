@@ -22,13 +22,34 @@ def Plateau(nbJoueurs, nbTresors):
                 ont été placée de manière aléatoire
               - la carte amovible qui n'a pas été placée sur le plateau
     """
+    les_tresors_affectes = set()
     plateau = Matrice(7,7)
     for ligne in range(7) : 
         for colonne in range(7):
-            carte = Carte(bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),)
+            tresor = random.randint(0,nbTresors)
+            while tresor in les_tresors_affectes and tresor != 0 :
+                if len(les_tresors_affectes) == nbTresors :
+                    tresor = 0
+                else : 
+                    tresor = random.randint(0,nbTresors)
+            les_tresors_affectes.add(tresor)
+            carte = Carte(bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),tresor, [])
             setVal(plateau,ligne,colonne,carte)
-
-
+    tresor_am = random.randint(0,49)
+    while tresor in les_tresors_affectes and tresor != 0 :
+                if len(les_tresors_affectes) == nbTresors :
+                    tresor_am = 0
+                else : 
+                    tresor_am = random.randint(0,49)
+    carte_amovible = Carte(bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),tresor, [])
+    plateau[0][0]['pions'].append(1)
+    if nbJoueurs > 1 :
+        plateau[0][6]['pions'].append(2)
+    if nbJoueurs > 2 :
+        plateau[6][0]['pions'].append(3)
+    if nbJoueurs > 3 :
+        plateau[6][6]['pions'].append(4)
+    return (plateau, carte_amovible)
 
 def creerCartesAmovibles(tresorDebut,nbTresors):
     """
@@ -84,6 +105,7 @@ def prendrePionPlateau(plateau,lin,col,numJoueur):
     Cette fonction ne retourne rien mais elle modifie le plateau
     """
     pass
+
 def poserPionPlateau(plateau,lin,col,numJoueur):
     """
     met le pion du joueur sur la carte qui se trouve en (lig,col) du plateau

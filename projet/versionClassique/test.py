@@ -37,10 +37,34 @@ setVal(m, 0, 1, 2)
 setVal(m, 1, 0, 3)
 setVal(m, 1, 1, 4)
 #aff_matrice(m)
+nbTresors = 6
+les_tresors_affectes = set()
+les_tresors = []
+for ligne in range(7) : 
+    for colonne in range(7):
+        tresor = random.randint(0,nbTresors)
+        while tresor in les_tresors_affectes and tresor != 0 :
+            if len(les_tresors_affectes) == nbTresors :
+                tresor = 0
+            else : 
+                tresor = random.randint(0,nbTresors)
+        les_tresors.append(tresor)
+        les_tresors_affectes.add(tresor)
 
-print(random.randint(0,49))
-print(random.randint(0,49))
-print(random.randint(0,49))
-print(random.randint(0,49))
-print(random.randint(0,49))
-print(random.randint(0,49))
+print(les_tresors)
+
+def nb_occ (liste, nb):
+    nbocc = 0
+    for elem in liste : 
+        if elem == nb :
+            nbocc += 1
+    return nbocc
+
+def doublons (liste) : 
+    for elem in liste : 
+        if nb_occ(liste, elem) > 1 and elem != 0:
+            return True 
+    return False
+
+print(doublons(les_tresors))
+

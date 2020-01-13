@@ -23,25 +23,38 @@ def Matrice(nbLignes,nbColonnes,valeurParDefaut=0):
       valeurParDefaut la valeur par défaut
     résultat la matrice ayant les bonnes propriétés
     """
-    matrice = []
-    for indice_ext in range(nbLignes):
-        matrice.append([valeurParDefaut]*nbColonnes)
-    return matrice
+    res=[]
+
+    for i in range(nbLignes):
+
+        liste = nbColonnes * [valeurParDefaut]
+        res.append(liste)
+
+    return res
 
 def getNbLignes(matrice):
     """
     retourne le nombre de lignes de la matrice
     paramètre: matrice la matrice considérée
     """
-    return len(matrice)
+    ligne=0
+    for elem in matrice:
+        ligne += 1
+    return ligne
 
 def getNbColonnes(matrice):
     """
-    retosetVal(matrice,ligne,colonne,valeur) colonnes de la matrice
-    parasetVal(matrice,ligne,colonne,valeur) matrice considérée
+    retourne le nombre de colonnes de la matrice
+    paramètre: matrice la matrice considérée
     """
-    #passsetVal(matrice,ligne,colonne,valeur)
-    return len(matrice[0])
+    colonne=0
+    element=0
+    ligne = getNbLignes(matrice)
+    for i in range(len(matrice)):
+        for j in range(len(matrice[i])):
+            element+=1
+    colonne = element//ligne
+    return colonne
 
 def getVal(matrice,ligne,colonne):
     """
@@ -52,7 +65,7 @@ def getVal(matrice,ligne,colonne):
     """
     return matrice[ligne][colonne]
 
-def setVal(matrice,lig,col,val):
+def setVal(matrice,ligne,colonne,valeur):
     """
     met la valeur dans la case se trouve en (ligne,colonne) de la matrice
     paramètres: matrice la matrice considérée
@@ -61,7 +74,10 @@ def setVal(matrice,lig,col,val):
                 valeur la valeur à stocker dans la matrice
     cette fonction ne retourne rien mais modifie la matrice
     """
-    matrice[lig][col] = val
+    liste=matrice
+    liste[ligne].pop(colonne)
+    liste[ligne].insert(colonne,valeur)
+    matrice=liste
 
 
 #------------------------------------------        
@@ -77,7 +93,13 @@ def decalageLigneAGauche(matrice, numLig, nouvelleValeur=0):
                  nouvelleValeur la valeur à placer
     résultat la valeur qui a été ejectée lors du décalage
     """
-    pass
+    j = 0
+    res = matrice[numLig][0]
+    while j < getNbColonnes(matrice)-1:
+        setVal(matrice,numLig,j,getVal(matrice,numLig,j+1))
+        j+=1
+    setVal(matrice,numLig,getNbColonnes(matrice)-1,nouvelleValeur)
+    return res
 
 def decalageLigneADroite(matrice, numLig, nouvelleValeur=0):
     """
@@ -88,7 +110,14 @@ def decalageLigneADroite(matrice, numLig, nouvelleValeur=0):
                  nouvelleValeur la valeur à placer
     résultat: la valeur de la case "ejectée" par le décalage
     """
-    pass
+    j = getNbColonnes(matrice)-1
+    res = matrice[numLig][j]
+    while j > 0:
+        setVal(matrice,numLig,j,getVal(matrice,numLig,j-1))
+        j-=1
+    setVal(matrice,numLig,0,nouvelleValeur)
+    return res
+
 def decalageColonneEnHaut(matrice, numCol, nouvelleValeur=0):
     """
     decale la colonne numCol d'une case vers le haut en insérant une nouvelle
@@ -98,7 +127,13 @@ def decalageColonneEnHaut(matrice, numCol, nouvelleValeur=0):
                  nouvelleValeur la valeur à placer
     résultat: la valeur de la case "ejectée" par le décalage
     """
-    pass
+    i = 0
+    res = matrice[0][numCol]
+    while i < getNbLignes(matrice)-1:
+        setVal(matrice,i,numCol,getVal(matrice,i+1,numCol))
+        i+=1
+    setVal(matrice,getNbLignes(matrice)-1,numCol,nouvelleValeur)
+    return res
 
 def decalageColonneEnBas(matrice, numCol, nouvelleValeur=0):
     """
@@ -109,5 +144,52 @@ def decalageColonneEnBas(matrice, numCol, nouvelleValeur=0):
                  nouvelleValeur la valeur à placer
     résultat: la valeur de la case "ejectée" par le décalage
     """
-    pass
+    i = getNbLignes(matrice)-1
+    res = matrice[i][numCol]
+    while i > 0:
+        setVal(matrice,i,numCol,getVal(matrice,i-1,numCol))
+        i-=1
+    setVal(matrice,i,numCol,nouvelleValeur)
+    return res
 
+
+def afficheLigneSeparatrice(matrice,tailleCellule=4):
+    ''' 
+    fonction annexe pour afficher les lignes séparatrices
+    paramètres: matrice la matrice à afficher
+                tailleCellule la taille en nb de caractères d'une cellule
+    résultat: cette fonction ne retourne rien mais fait un affichage
+    '''
+    print()
+    for i in range(getNbColonnes(matrice)+1):
+        print('-'*tailleCellule+'+',end='')
+    print()
+
+def affiche_matrice(matrice,tailleCellule=4):
+    '''
+    affiche le contenue d'une matrice présenté sous le format d'une grille
+    paramètres: matrice la matrice à afficher
+                tailleCellule la taille en nb de caractères d'une cellule
+    résultat: cette fonction ne retourne rien mais fait un affichage
+    '''
+
+    nbColonnes=getNbColonnes(matrice)
+    nbLignes=getNbLignes(matrice)
+    print(' '*tailleCellule+'|',end='')
+    for i in range(nbColonnes):
+        print(str(i).center(tailleCellule)+'|',end='')
+    afficheLigneSeparatrice(matrice,tailleCellule)
+    for i in range(nbLignes):
+        print(str(i).rjust(tailleCellule)+'|',end='')
+        for j in range(nbColonnes):
+            print(str(getVal(matrice,i,j)).rjust(tailleCellule)+'|',end='')
+        afficheLigneSeparatrice(matrice,tailleCellule)
+    print()
+
+#matrice = [[1,2,3,4,5,6,7],[8,9,10,11,12,13,14],[15,16,17,18,19,20,21],[22,23,24,25,26,27,28],[29,30,31,32,33,34,35],[36,37,38,39,40,41,42],[43,44,45,46,47,48,49]]
+
+#affiche_matrice(matrice)
+
+#decalageColonneEnHaut(matrice,4,917)
+
+#affiche_matrice(matrice)
