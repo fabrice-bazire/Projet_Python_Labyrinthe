@@ -23,7 +23,7 @@ def ListeJoueurs(nomsJoueurs):
     for joueur in nomsJoueurs :
         les_joueurs[cpt] = Joueur(joueur) #cpt est le numéro du joueur que l'on ajoute à la liste
         cpt += 1
-    return [les_joueurs, 1] #ici 0 represente le numéro du joueur courant
+    return [les_joueurs, 0] #ici 1 represente le numéro du joueur courant
     
 
 def ajouterJoueur(joueurs, joueur):
@@ -56,14 +56,24 @@ def distribuerTresors(joueurs,nbTresors=24, nbTresorMax=0):
     cette fonction ne retourne rien mais modifie la liste des joueurs
     """
     #distribuer les trésors : parcourir le nbtresors et attribuer à un joueur aleatoirement si ce joueur a moins de nbtresormax 
-    for tresor in range(1, nbTresors, 1) :
-        joueur_random = random.randint(0,getNbJoueurs(joueurs)-1)
-        if nbTresorMax != 0 :
-            if len(joueurs[0][joueur_random][1]) < nbTresorMax :
-                ajouterTresor(joueurs[0][joueur_random], tresor)
-        else : 
-                if len(joueurs[0][joueur_random][1]) < nbTresor // getNbJoueurs(joueurs) :                    
-                    joueurs[0][joueur_random][1].append(tresor)
+    les_tresors = []
+    nb_tresor_par_joueur = 0
+    for i in range(nbTresors) :
+        les_tresors.append(i+1)
+    random.shuffle(les_tresors)
+    nb_joueurs = len(joueurs[0])
+    if nbTresorMax == 0 :
+        while len(les_tresors) % nb_joueurs == O:
+            for i in range(nb_joueurs) :
+                joueurs[0][i+1][1].append(les_tresors[0])
+                les_tresors.pop(0)
+    else : 
+        while len(les_tresors) % nb_joueurs == 0 and nb_tresor_par_joueur < nbTresorMax :
+            for i in range(nb_joueurs) :
+                joueurs[0][i+1][1].append(les_tresors[0])
+                les_tresors.pop(0)
+            nb_tresor_par_joueur += 1
+
 
 def changerJoueurCourant(joueurs):
     """
@@ -71,7 +81,7 @@ def changerJoueurCourant(joueurs):
     paramètres: joueurs la liste des joueurs
     cette fonction ne retourne rien mais modifie la liste des joueurs
     """   
-    joueurs[1] = (joueurs[1]+1) % len(joueurs[0])
+    joueurs[1] = ((joueurs[1]+1) % len(joueurs[0]))
 
 def getNbJoueurs(joueurs):
     """
@@ -87,7 +97,7 @@ def getJoueurCourant(joueurs):
     paramètre: joueurs la liste des joueurs
     cette fonction ne retourne rien mais modifie la liste des joueurs
     """
-    return joueurs[0][joueurs[1]]
+    return joueurs[0][joueurs[1]+1]
 
 def joueurCourantTrouveTresor(joueurs):
     """

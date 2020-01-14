@@ -71,6 +71,9 @@ def Plateau(nbJoueurs, nbTresors):
         plateau[6][6]['pions'].append(4)
     return (plateau, carte_amovible)
 
+p = Plateau(2,35)
+print(p)
+
 def creerCartesAmovibles(tresorDebut,nbTresors):
     """
     fonction utilitaire qui permet de créer les cartes amovibles du jeu en y positionnant
@@ -216,9 +219,6 @@ def marquageDirect(calque,plateau,val,marque):
 
     return estMarqué
 
-
-plateau = Plateau(4,24)
-print(str(accessible(plateau,1,1,6,8)))
 
 
 def accessibleDist(plateau,ligD,colD,ligA,colA):
