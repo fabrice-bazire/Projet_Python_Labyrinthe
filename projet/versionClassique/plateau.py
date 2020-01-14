@@ -67,7 +67,29 @@ def creerCartesAmovibles(tresorDebut,nbTresors):
                 nbTresors: le nombre total de trésor à créer
     résultat: la liste mélangée aléatoirement des cartes amovibles créees
     """
-    pass
+    liste=[]
+    i=0
+    liste_tresor = []
+    liste_tresor.append(tresorDebut)
+    while len(liste_tresor)<nbTresors:
+        liste_tresor.append(tresorDebut)
+        tresorDebut+=1
+    while len(liste)<16:
+        liste.append(Carte(False, True, False, True))
+    while len(liste)<28:
+        liste.append(Carte(True,True,False,False))
+    while len(liste)<34:
+        liste.append(Carte(False,False,False,True))
+
+    random.shuffle(liste)
+    for element in liste:
+        tourneAleatoire(element)
+    for tresor in liste_tresor:
+        mettreTresor(liste[i],tresor)
+        i+=1
+    random.shuffle(liste)
+    res=liste
+    return res
 
 def prendreTresorPlateau(plateau,lig,col,numTresor):
     """
