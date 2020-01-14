@@ -56,6 +56,12 @@ def Plateau(nbJoueurs, nbTresors):
     setVal(plateau, 6, 4, Carte(False, False, True, False, les_tresors[0]))
     les_tresors.pop(0)
     setVal(plateau, 4, 0, Carte(False, False, False, True, les_tresors[0]))
+    les_cartes_amovibles = creerCartesAmovibles(14, nbTresors)
+    for lig in range(getNbLignes(plateau)) : 
+        for col in range(getNbColonnes(plateau)) :
+            if lig % 2 == 1 or col % 2 == 1 : 
+                setVal(plateau, lig, col, les_cartes_amovibles[0])
+                les_cartes_amovibles.pop(0) 
     return (plateau, 0)
 
 def creerCartesAmovibles(tresorDebut,nbTresors):
@@ -80,16 +86,15 @@ def creerCartesAmovibles(tresorDebut,nbTresors):
         liste.append(Carte(True,True,False,False))
     while len(liste)<34:
         liste.append(Carte(False,False,False,True))
-
     random.shuffle(liste)
     for element in liste:
         tourneAleatoire(element)
     for tresor in liste_tresor:
-        mettreTresor(liste[i],tresor)
+        if i < len(liste) :
+            mettreTresor(liste[i],tresor)
         i+=1
     random.shuffle(liste)
-    res=liste
-    return res
+    return liste
 
 def prendreTresorPlateau(plateau,lig,col,numTresor):
     """
