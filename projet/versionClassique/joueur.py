@@ -16,7 +16,6 @@ def Joueur(nom):
     retourne le joueur ainsi créé
     """
     pass
-
 def ajouterTresor(joueur,tresor):
     """
     ajoute un trésor à trouver à un joueur (ce trésor sera ajouter en fin de liste) Si le trésor est déjà dans la liste des trésors à trouver la fonction ne fait rien

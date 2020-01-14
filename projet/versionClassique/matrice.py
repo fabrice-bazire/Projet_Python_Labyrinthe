@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-                           Projet Labyrinthe 
+                           Projet Labyrinthe
         Projet Python 2019-2020 de 1ere année et AS DUT Informatique Orléans
-        
+
    Module matrice
    ~~~~~~~~~~~~~~~
-   
-   Ce module gère une matrice. 
+
+   Ce module gère une matrice.
 """
 
 #-----------------------------------------
@@ -15,29 +15,46 @@
 
 def Matrice(nbLignes,nbColonnes,valeurParDefaut=0):
     """
-    crée une matrice de nbLignes lignes sur nbColonnes colonnes en mettant 
+    crée une matrice de nbLignes lignes sur nbColonnes colonnes en mettant
     valeurParDefaut dans chacune des cases
-    paramètres: 
+    paramètres:
       nbLignes un entier strictement positif qui indique le nombre de lignes
       nbColonnes un entier strictement positif qui indique le nombre de colonnes
       valeurParDefaut la valeur par défaut
-    résultat la matrice ayant les bonnes propriétés
+    résultat tresorDebut,nbTresorsla matrice ayant les bonnes propriétés
     """
-    pass
+    res=[]
+
+    for i in range(nbLignes):
+
+        liste = nbColonnes * [valeurParDefaut]
+        res.append(liste)
+
+    return res
 
 def getNbLignes(matrice):
     """
     retourne le nombre de lignes de la matrice
     paramètre: matrice la matrice considérée
     """
-    pass
+    ligne=0
+    for elem in matrice:
+        ligne += 1
+    return ligne
 
 def getNbColonnes(matrice):
     """
     retourne le nombre de colonnes de la matrice
     paramètre: matrice la matrice considérée
     """
-    pass
+    colonne=0
+    element=0
+    ligne = getNbLignes(matrice)
+    for i in range(len(matrice)):
+        for j in range(len(matrice[i])):
+            element+=1
+    colonne = element//ligne
+    return colonne
 
 def getVal(matrice,ligne,colonne):
     """
@@ -46,7 +63,7 @@ def getVal(matrice,ligne,colonne):
                 ligne le numéro de la ligne (en commençant par 0)
                 colonne le numéro de la colonne (en commençant par 0)
     """
-    pass
+    return matrice[ligne][colonne]
 
 def setVal(matrice,ligne,colonne,valeur):
     """
@@ -57,10 +74,13 @@ def setVal(matrice,ligne,colonne,valeur):
                 valeur la valeur à stocker dans la matrice
     cette fonction ne retourne rien mais modifie la matrice
     """
-    pass
+    liste=matrice
+    liste[ligne].pop(colonne)
+    liste[ligne].insert(colonne,valeur)
+    matrice=liste
 
 
-#------------------------------------------        
+#------------------------------------------
 # decalages
 #------------------------------------------
 def decalageLigneAGauche(matrice, numLig, nouvelleValeur=0):
@@ -73,7 +93,13 @@ def decalageLigneAGauche(matrice, numLig, nouvelleValeur=0):
                  nouvelleValeur la valeur à placer
     résultat la valeur qui a été ejectée lors du décalage
     """
-    pass
+    j = 0
+    res = matrice[numLig][0]
+    while j < getNbColonnes(matrice)-1:
+        setVal(matrice,numLig,j,getVal(matrice,numLig,j+1))
+        j+=1
+    setVal(matrice,numLig,getNbColonnes(matrice)-1,nouvelleValeur)
+    return res
 
 def decalageLigneADroite(matrice, numLig, nouvelleValeur=0):
     """
@@ -84,7 +110,14 @@ def decalageLigneADroite(matrice, numLig, nouvelleValeur=0):
                  nouvelleValeur la valeur à placer
     résultat: la valeur de la case "ejectée" par le décalage
     """
-    pass
+    j = getNbColonnes(matrice)-1
+    res = matrice[numLig][j]
+    while j > 0:
+        setVal(matrice,numLig,j,getVal(matrice,numLig,j-1))
+        j-=1
+    setVal(matrice,numLig,0,nouvelleValeur)
+    return res
+
 def decalageColonneEnHaut(matrice, numCol, nouvelleValeur=0):
     """
     decale la colonne numCol d'une case vers le haut en insérant une nouvelle
@@ -94,7 +127,13 @@ def decalageColonneEnHaut(matrice, numCol, nouvelleValeur=0):
                  nouvelleValeur la valeur à placer
     résultat: la valeur de la case "ejectée" par le décalage
     """
-    pass
+    i = 0
+    res = matrice[0][numCol]
+    while i < getNbLignes(matrice)-1:
+        setVal(matrice,i,numCol,getVal(matrice,i+1,numCol))
+        i+=1
+    setVal(matrice,getNbLignes(matrice)-1,numCol,nouvelleValeur)
+    return res
 
 def decalageColonneEnBas(matrice, numCol, nouvelleValeur=0):
     """
@@ -105,5 +144,44 @@ def decalageColonneEnBas(matrice, numCol, nouvelleValeur=0):
                  nouvelleValeur la valeur à placer
     résultat: la valeur de la case "ejectée" par le décalage
     """
-    pass
+    i = getNbLignes(matrice)-1
+    res = matrice[i][numCol]
+    while i > 0:
+        setVal(matrice,i,numCol,getVal(matrice,i-1,numCol))
+        i-=1
+    setVal(matrice,i,numCol,nouvelleValeur)
+    return res
 
+
+def afficheLigneSeparatrice(matrice,tailleCellule=4):
+    '''
+    fonction annexe pour afficher les lignes séparatrices
+    paramètres: matrice la matrice à afficher
+                tailleCellule la taille en nb de caractères d'une cellule
+    résultat: cette fonction ne retourne rien mais fait un affichage
+    '''
+    print()
+    for i in range(getNbColonnes(matrice)+1):
+        print('-'*tailleCellule+'+',end='')
+    print()
+
+def affiche_matrice(matrice,tailleCellule=4):
+    '''
+    affiche le contenue d'une matrice présenté sous le format d'une grille
+    paramètres: matrice la matrice à afficher
+                tailleCellule la taille en nb de caractères d'une cellule
+    résultat: cette fonction ne retourne rien mais fait un affichage
+    '''
+
+    nbColonnes=getNbColonnes(matrice)
+    nbLignes=getNbLignes(matrice)
+    print(' '*tailleCellule+'|',end='')
+    for i in range(nbColonnes):
+        print(str(i).center(tailleCellule)+'|',end='')
+    afficheLigneSeparatrice(matrice,tailleCellule)
+    for i in range(nbLignes):
+        print(str(i).rjust(tailleCellule)+'|',end='')
+        for j in range(nbColonnes):
+            print(str(getVal(matrice,i,j)).rjust(tailleCellule)+'|',end='')
+        afficheLigneSeparatrice(matrice,tailleCellule)
+    print()
