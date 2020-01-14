@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-                           Projet Labyrinthe 
+                           Projet Labyrinthe
         Projet Python 2019-2020 de 1ere année et AS DUT Informatique Orléans
-        
+
    Module plateau
    ~~~~~~~~~~~~~~
-   
-   Ce module gère le plateau de jeu. 
+
+   Ce module gère le plateau de jeu.
 """
 
 from matrice import *
@@ -22,26 +22,46 @@ def Plateau(nbJoueurs, nbTresors):
                 ont été placée de manière aléatoire
               - la carte amovible qui n'a pas été placée sur le plateau
     """
+    def attribuer_tresor(les_tresors_affectes, nbTresors) :
+        tresor = random.randint(0,nbTresors)
+        while tresor in les_tresors_affectes and tresor != 0 :
+            if len(les_tresors_affectes) == nbTresors :
+                tresor = 0
+            else :
+                tresor = random.randint(0,nbTresors)
+            les_tresors_affectes.add(tresor)
+        return tresor
     les_tresors_affectes = set()
     plateau = Matrice(7,7)
-    for ligne in range(7) : 
+    for ligne in range(7) :
         for colonne in range(7):
-            tresor = random.randint(0,nbTresors)
-            while tresor in les_tresors_affectes and tresor != 0 :
-                if len(les_tresors_affectes) == nbTresors :
-                    tresor = 0
-                else : 
-                    tresor = random.randint(0,nbTresors)
-            les_tresors_affectes.add(tresor)
-            carte = Carte(bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),tresor, [])
-            setVal(plateau,ligne,colonne,carte)
-    tresor_am = random.randint(0,49)
+            if ligne % 2 == 1 or colonne % 2 == 1 :
+                tresor = attribuer_tresor(les_tresors_affectes, nbTresors)
+                carte = Carte(bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),tresor)
+                setVal(plateau,ligne,colonne,carte)
+    setVal(plateau,0,0,Carte(True, False, False, True))
+    setVal(plateau,0,6,Carte(True, True, False, False))
+    setVal(plateau,6,0,Carte(False, False, True, True))
+    setVal(plateau,6,6,Carte(False, True, True, False))
+    setVal(plateau, 0, 2, Carte(True, False, False, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 0, 4, Carte(True, False, False, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 2, 4, Carte(True, False, False, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 2, 0, Carte(False, False, False, True, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 2, 2, Carte(False, False, False, True, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 2, 4, Carte(False, False, False, True, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 2, 6, Carte(False, True, False, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 4, 6, Carte(False, True, False, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 4, 4, Carte(False, True, False, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 4, 2, Carte(False, False, True, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 6, 2, Carte(False, False, True, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    setVal(plateau, 6, 4, Carte(False, False, True, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
+    tresor_am = random.randint(0,nbTresors)
     while tresor in les_tresors_affectes and tresor != 0 :
                 if len(les_tresors_affectes) == nbTresors :
                     tresor_am = 0
-                else : 
-                    tresor_am = random.randint(0,49)
-    carte_amovible = Carte(bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),tresor, [])
+                else :
+                    tresor_am = random.randint(0,nbTresors)
+    carte_amovible = Carte(bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),tresor)
     plateau[0][0]['pions'].append(1)
     if nbJoueurs > 1 :
         plateau[0][6]['pions'].append(2)
@@ -73,14 +93,14 @@ def prendreTresorPlateau(plateau,lig,col,numTresor):
                 numTresor: le numéro du trésor à prendre sur la carte
     resultat: un booléen indiquant si le trésor était bien sur la carte considérée
     """
-    if plateau[0][lig][col]['tresor'] == numTresor : 
+    if plateau[0][lig][col]['tresor'] == numTresor :
         plateau[0][lig][col]['tresor'] = 0
         return True
-    else : 
+    else :
         return False
 
 def getCoordonneesTresor(plateau,numTresor):
-    """
+    """"
     retourne les coordonnées sous la forme (lig,col) du trésor passé en paramètre
     paramètres: plateau: le plateau considéré
                 numTresor: le numéro du trésor à trouver
@@ -129,6 +149,42 @@ def poserPionPlateau(plateau,lin,col,numJoueur):
     """
     plateau[0][lin][col]['pions'].append(numJoueur)
 
+def marquageDirect(calque,plateau,val,marque):
+    """
+    marque avec la valeur marque les éléments du calque tel que la valeur
+    correspondante n'est pas un mur (de valeur differente de 1) et
+    qu'un de ses voisins dans le calque à pour valeur val
+    la fonction doit retourner True si au moins une case du calque a été marquée
+    """
+    nbLigne = getNbLignes(plateau[0])
+    nbCol = getNbColonnes(plateau[0])
+    estMarqué = False
+
+    for i in range (nbLigne):
+
+        for j in range(nbCol):
+
+            # Vérification voisin du dessous
+            if passageSud(getVal(plateau[0],i,j),getVal(plateau[0],i,j+1)):
+                setVal(calque,i,j,marque)
+                estMarqué = True
+                #positionActuel = position de la carte sud
+
+            # Vérification voisin du dessus
+            elif passageNord(getVal(plateau[0],i,j),getVal(plateau[0],i,j-1)):
+                setVal(calque,i,j-1,marque)
+                estMarqué = True
+            # Vérification voisin de droite
+            elif passageEst(getVal(plateau[0],i,j),getVal(plateau[0],i+1,j)):
+                setVal(calque,i+1,j,marque)
+                estMarqué = True
+
+            # Vérification voisin de gauche
+            elif passageOuest(getVal(plateau[0],i,j),getVal(plateau[0],i,j+1)):
+                setVal(calque,i-1,j,marque)
+                estMarqué = True
+
+    return estMarqué
 
 def accessible(plateau,ligD,colD,ligA,colA):
     """
@@ -159,7 +215,7 @@ def accessible(plateau,ligD,colD,ligA,colA):
 def accessibleDist(plateau,ligD,colD,ligA,colA):
     """
     indique si il y a un chemin entre la case ligD,colD et la case ligA,colA du plateau
-    mais la valeur de retour est None s'il n'y a pas de chemin, 
+    mais la valeur de retour est None s'il n'y a pas de chemin,
     sinon c'est un chemin possible entre ces deux cases sous la forme d'une liste
     de coordonées (couple de (lig,col))
     paramètres: plateau: le plateau considéré
@@ -173,37 +229,6 @@ def accessibleDist(plateau,ligD,colD,ligA,colA):
     pass
 
 
+plateau = Plateau(4,24)
 
-
-def marquageDirect(calque,plateau,val,marque):
-    '''
-    marque avec la valeur marque les éléments du calque tel que la valeur 
-    correspondante n'est pas un mur (de valeur differente de 1) et 
-    qu'un de ses voisins dans le calque à pour valeur val
-    la fonction doit retourner True si au moins une case du calque a été marquée
-    '''
-    nbLigne = getNbLignes(plateau[0])
-    nbCol = getNbColonnes(plateau[0])
-    estMarqué = False
-
-    for i in range (nbLigne):
-
-        for j in range(nbCol):
-
-            # Vérification voisin du dessous
-            #positionActuel = (i,j)
-            getVal(plateau[0],i,j)
-            if passageSud(getVal(plateau[0],i,j),getVal(plateau[0],i,j+1)):
-                #effectué marquage
-                #positionActuel = position de la carte sud
-
-            # Vérification voisin du dessus
-            
-
-            # Vérification voisin de droite
-            
-
-            # Vérification voisin de gauche
-            
-
-    return estMarqué
+print(accessible(plateau,0,0,1,1))
