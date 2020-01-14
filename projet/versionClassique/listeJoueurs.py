@@ -18,12 +18,12 @@ def ListeJoueurs(nomsJoueurs):
     paramètre: nomsJoueurs une liste de chaines de caractères
     résultat: la liste des joueurs avec un joueur courant mis à 0
     """
-    cpt = 0
+    cpt = 1
     les_joueurs = {}
     for joueur in nomsJoueurs :
         les_joueurs[cpt] = Joueur(joueur) #cpt est le numéro du joueur que l'on ajoute à la liste
         cpt += 1
-    return [les_joueurs, 0] #ici 0 represente le numéro du joueur courant
+    return [les_joueurs, 1] #ici 0 represente le numéro du joueur courant
     
 
 def ajouterJoueur(joueurs, joueur):
