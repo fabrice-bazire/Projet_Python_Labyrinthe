@@ -25,25 +25,14 @@ def Labyrinthe(nomsJoueurs=["joueur1","joueurs2"],nbTresors=24, nbTresorsMax=0):
                 nbTresorMax le nombre de trésors maximum distribué à chaque joueur
     résultat: le labyrinthe crée
     """
-    creation_plateau = Plateau(nbJoueurs,nbTresors)
+    nv_plateau = Plateau(nbJoueurs,nbTresors)
 
     labyrinthe = dict()
 
-    labyrinthe[plateau]=creation_plateau[0]
+    labyrinthe[plateau]=nv_plateau[0]
     labyrinthe[liste_joueurs]=nomsJoueurs
-    labyrinthe[carte_amovible]=creation_plateau[1]
-    labyrinthe[phase]=
-
-    def executerActionPhase1():
-        pass
-
-
-    def accessibleDistJoueurCourant():
-        pass
-
-
-    def finirTour():
-        pass
+    labyrinthe[carte_amovible]=nv_plateau[1]
+    labyrinthe[phase]=1
 
 
 #    _____________________________________________________
@@ -78,7 +67,7 @@ def getNomJoueurCourant(labyrinthe):
     paramètre: labyrinthe le labyrinthe considéré
     résultat: le nom du joueurs courant
     """
-    return nomJoueurCourant(labyrinthe[1])
+    return nomJoueurCourant(labyrinthe[liste_joueurs])
 
 def getNumJoueurCourant(labyrinthe):
     """
@@ -86,7 +75,7 @@ def getNumJoueurCourant(labyrinthe):
     paramètre: labyrinthe le labyrinthe considéré
     résultat: le numero du joueurs courant
     """
-    return numJoueurCourant(labyrinthe[1])
+    return numJoueurCourant(labyrinthe[liste_joueurs])
 
 def getPhase(labyrinthe):
     """
@@ -94,7 +83,7 @@ def getPhase(labyrinthe):
     paramètre: labyrinthe le labyrinthe considéré
     résultat: le numéro de la phase de jeu courante
     """
-    pass
+    return labyrinthe[phase]
 
 
 def changerPhase(labyrinthe):
@@ -103,7 +92,7 @@ def changerPhase(labyrinthe):
     paramètre: labyrinthe le labyrinthe considéré
     la fonction ne retourne rien mais modifie le labyrinthe
     """
-    pass
+    labyrinthe[phase]=2
 
 
 def getNbTresors(labyrinthe):
@@ -112,7 +101,11 @@ def getNbTresors(labyrinthe):
     paramètre: labyrinthe le labyrinthe considéré
     résultat: le nombre de trésors sur le plateau
     """
-    pass
+    res = 0
+    for joueur in labyrinthe[liste_joueurs]:
+        res += getNbTresorsRestants(joueur)
+    return res
+
 
 def getListeJoueurs(labyrinthe):
     """
@@ -120,7 +113,7 @@ def getListeJoueurs(labyrinthe):
     paramètre: labyrinthe le labyrinthe considéré
     résultat: les joueurs sous la forme de la structure implémentée dans listeJoueurs.py
     """
-    pass
+    return ListeJoueurs(labyrinthe[liste_joueurs])
 
 
 def enleverTresor(labyrinthe,lin,col,numTresor):
@@ -245,6 +238,8 @@ def executerActionPhase1(labyrinthe,action,rangee):
               4 dans tous les autres cas
     """
     pass
+     #SaisirOrdre retourne (NSEO,135) (Nord Sud Est Ouest, 1 3 5)
+
 
 def accessibleDistJoueurCourant(labyrinthe, ligA,colA):
     """
@@ -269,4 +264,9 @@ def finirTour(labyrinthe):
               1 si le joueur courant a trouvé un trésor mais la partie n'est pas terminée
               2 si le joueur courant a trouvé son dernier trésor (la partie est donc terminée)
     """
+    # Vérifie si trésor trouvé
+        # Si oui : attribuer nouveau trésor courant
+    # Retour phase 1
+    # changerJoueurCourant()
+
     pass

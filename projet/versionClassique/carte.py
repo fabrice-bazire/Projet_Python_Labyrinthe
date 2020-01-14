@@ -214,10 +214,9 @@ def tourneAleatoire(c):
     paramètres: c une carte
     Cette fonction modifie la carte mais ne retourne rien
     """
-    c['nord']=(random.randint(0,20))*tournerHoraire(c)
-    c['est']=(random.randint(0,20))*tournerHoraire(c)
-    c['sud']=(random.randint(0,20))*tournerHoraire(c)
-    c['ouest']=(random.randint(0,20))*tournerHoraire(c)
+    nb_tour=random.randint(1,3)
+    for i in range(nb_tour):
+        tournerHoraire(c)
 
 def coderMurs(c):
     """

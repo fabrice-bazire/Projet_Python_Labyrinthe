@@ -12,6 +12,7 @@
 from matrice import *
 from carte import *
 
+
 def Plateau(nbJoueurs, nbTresors):
     """
     créer un nouveau plateau contenant nbJoueurs et nbTrésors
@@ -22,54 +23,47 @@ def Plateau(nbJoueurs, nbTresors):
                 ont été placée de manière aléatoire
               - la carte amovible qui n'a pas été placée sur le plateau
     """
-    def attribuer_tresor(les_tresors_affectes, nbTresors) :
-        tresor = random.randint(0,nbTresors)
-        while tresor in les_tresors_affectes and tresor != 0 :
-            if len(les_tresors_affectes) == nbTresors :
-                tresor = 0
-            else :
-                tresor = random.randint(0,nbTresors)
-            les_tresors_affectes.add(tresor)
-        return tresor
-    les_tresors_affectes = set()
+    les_tresors = []
+    for indice in range(13) :
+        les_tresors.append(indice+1)
+    random.shuffle(les_tresors)
     plateau = Matrice(7,7)
-    for ligne in range(7) :
-        for colonne in range(7):
-            if ligne % 2 == 1 or colonne % 2 == 1 :
-                tresor = attribuer_tresor(les_tresors_affectes, nbTresors)
-                carte = Carte(bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),tresor)
-                setVal(plateau,ligne,colonne,carte)
     setVal(plateau,0,0,Carte(True, False, False, True))
     setVal(plateau,0,6,Carte(True, True, False, False))
     setVal(plateau,6,0,Carte(False, False, True, True))
     setVal(plateau,6,6,Carte(False, True, True, False))
-    setVal(plateau, 0, 2, Carte(True, False, False, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
-    setVal(plateau, 0, 4, Carte(True, False, False, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
-    setVal(plateau, 2, 4, Carte(True, False, False, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
-    setVal(plateau, 2, 0, Carte(False, False, False, True, attribuer_tresor(les_tresors_affectes, nbTresors)))
-    setVal(plateau, 2, 2, Carte(False, False, False, True, attribuer_tresor(les_tresors_affectes, nbTresors)))
-    setVal(plateau, 2, 4, Carte(False, False, False, True, attribuer_tresor(les_tresors_affectes, nbTresors)))
-    setVal(plateau, 2, 6, Carte(False, True, False, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
-    setVal(plateau, 4, 6, Carte(False, True, False, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
-    setVal(plateau, 4, 4, Carte(False, True, False, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
-    setVal(plateau, 4, 2, Carte(False, False, True, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
-    setVal(plateau, 6, 2, Carte(False, False, True, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
-    setVal(plateau, 6, 4, Carte(False, False, True, False, attribuer_tresor(les_tresors_affectes, nbTresors)))
-    tresor_am = random.randint(0,nbTresors)
-    while tresor in les_tresors_affectes and tresor != 0 :
-                if len(les_tresors_affectes) == nbTresors :
-                    tresor_am = 0
-                else :
-                    tresor_am = random.randint(0,nbTresors)
-    carte_amovible = Carte(bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),bool(random.getrandbits(1)),tresor)
-    plateau[0][0]['pions'].append(1)
-    if nbJoueurs > 1 :
-        plateau[0][6]['pions'].append(2)
-    if nbJoueurs > 2 :
-        plateau[6][0]['pions'].append(3)
-    if nbJoueurs > 3 :
-        plateau[6][6]['pions'].append(4)
-    return (plateau, carte_amovible)
+    setVal(plateau, 0, 2, Carte(True, False, False, False, les_tresors[0]))
+    les_tresors.pop(0)
+    setVal(plateau, 0, 4, Carte(True, False, False, False, les_tresors[0]))
+    les_tresors.pop(0)
+    setVal(plateau, 2, 4, Carte(True, False, False, False, les_tresors[0]))
+    les_tresors.pop(0)
+    setVal(plateau, 2, 0, Carte(False, False, False, True, les_tresors[0]))
+    les_tresors.pop(0)
+    setVal(plateau, 2, 2, Carte(False, False, False, True, les_tresors[0]))
+    les_tresors.pop(0)
+    setVal(plateau, 2, 4, Carte(False, False, False, True, les_tresors[0]))
+    les_tresors.pop(0)
+    setVal(plateau, 2, 6, Carte(False, True, False, False, les_tresors[0]))
+    les_tresors.pop(0)
+    setVal(plateau, 4, 6, Carte(False, True, False, False, les_tresors[0]))
+    les_tresors.pop(0)
+    setVal(plateau, 4, 4, Carte(False, True, False, False, les_tresors[0]))
+    les_tresors.pop(0)
+    setVal(plateau, 4, 2, Carte(False, False, True, False, les_tresors[0]))
+    les_tresors.pop(0)
+    setVal(plateau, 6, 2, Carte(False, False, True, False, les_tresors[0]))
+    les_tresors.pop(0)
+    setVal(plateau, 6, 4, Carte(False, False, True, False, les_tresors[0]))
+    les_tresors.pop(0)
+    setVal(plateau, 4, 0, Carte(False, False, False, True, les_tresors[0]))
+    les_cartes_amovibles = creerCartesAmovibles(14, nbTresors)
+    for lig in range(getNbLignes(plateau)) :
+        for col in range(getNbColonnes(plateau)) :
+            if lig % 2 == 1 or col % 2 == 1 :
+                setVal(plateau, lig, col, les_cartes_amovibles[0])
+                les_cartes_amovibles.pop(0)
+    return (plateau, 0)
 
 def creerCartesAmovibles(tresorDebut,nbTresors):
     """
@@ -80,7 +74,28 @@ def creerCartesAmovibles(tresorDebut,nbTresors):
                 nbTresors: le nombre total de trésor à créer
     résultat: la liste mélangée aléatoirement des cartes amovibles créees
     """
-    pass
+    liste=[]
+    i=0
+    liste_tresor = []
+    liste_tresor.append(tresorDebut)
+    while len(liste_tresor)<nbTresors:
+        liste_tresor.append(tresorDebut)
+        tresorDebut+=1
+    while len(liste)<16:
+        liste.append(Carte(False, True, False, True))
+    while len(liste)<28:
+        liste.append(Carte(True,True,False,False))
+    while len(liste)<34:
+        liste.append(Carte(False,False,False,True))
+    random.shuffle(liste)
+    for element in liste:
+        tourneAleatoire(element)
+    for tresor in liste_tresor:
+        if i < len(liste) :
+            mettreTresor(liste[i],tresor)
+        i+=1
+    random.shuffle(liste)
+    return liste
 
 def prendreTresorPlateau(plateau,lig,col,numTresor):
     """
@@ -93,8 +108,8 @@ def prendreTresorPlateau(plateau,lig,col,numTresor):
                 numTresor: le numéro du trésor à prendre sur la carte
     resultat: un booléen indiquant si le trésor était bien sur la carte considérée
     """
-    if plateau[0][lig][col]['tresor'] == numTresor :
-        plateau[0][lig][col]['tresor'] = 0
+    if plateau[lig][col]['tresor'] == numTresor :
+        plateau[lig][col]['tresor'] = 0
         return True
     else :
         return False
@@ -109,7 +124,7 @@ def getCoordonneesTresor(plateau,numTresor):
     """
     for ligne in range(7):
         for colonne in range(7):
-            if plateau[0][ligne][colonne]['tresor'] == numTresor :
+            if plateau[ligne][colonne]['tresor'] == numTresor :
                 return (ligne, colonne)
     return None
 
@@ -123,7 +138,7 @@ def getCoordonneesJoueur(plateau,numJoueur):
     """
     for ligne in range(7):
         for colonne in range(7):
-            if numJoueur in plateau[0][ligne][colonne]['pions']:
+            if numJoueur in plateau[ligne][colonne]['pions']:
                 return (ligne, colonne)
     return None
 
@@ -136,7 +151,7 @@ def prendrePionPlateau(plateau,lin,col,numJoueur):
                 numJoueur: le numéro du joueur qui correspond au pion
     Cette fonction ne retourne rien mais elle modifie le plateau
     """
-    plateau[0][lin][col]['pions'].pop(numJoueur)
+    plateau[lin][col]['pions'].pop(numJoueur)
 
 def poserPionPlateau(plateau,lin,col,numJoueur):
     """
@@ -147,7 +162,7 @@ def poserPionPlateau(plateau,lin,col,numJoueur):
                 numJoueur: le numéro du joueur qui correspond au pion
     Cette fonction ne retourne rien mais elle modifie le plateau
     """
-    plateau[0][lin][col]['pions'].append(numJoueur)
+    plateau[lin][col]['pions'].append(numJoueur)
 
 def marquageDirect(calque,plateau,val,marque):
     """
@@ -156,35 +171,36 @@ def marquageDirect(calque,plateau,val,marque):
     qu'un de ses voisins dans le calque à pour valeur val
     la fonction doit retourner True si au moins une case du calque a été marquée
     """
-    nbLigne = getNbLignes(plateau[0])
-    nbCol = getNbColonnes(plateau[0])
-    estMarqué = False
+    nbLigne = getNbLignes(plateau)
+    nbCol = getNbColonnes(plateau)
+    estMarque = False
 
     for i in range (nbLigne):
 
         for j in range(nbCol):
 
             # Vérification voisin du dessous
-            if passageSud(getVal(plateau[0],i,j),getVal(plateau[0],i,j+1)):
+            if passageSud(getVal(plateau,i,j),getVal(plateau,i,j+1)):
                 setVal(calque,i,j,marque)
-                estMarqué = True
+                estMarque = True
                 #positionActuel = position de la carte sud
 
             # Vérification voisin du dessus
-            elif passageNord(getVal(plateau[0],i,j),getVal(plateau[0],i,j-1)):
+            elif passageNord(getVal(plateau,i,j),getVal(plateau,i,j-1)):
                 setVal(calque,i,j-1,marque)
-                estMarqué = True
+                estMarque = True
             # Vérification voisin de droite
-            elif passageEst(getVal(plateau[0],i,j),getVal(plateau[0],i+1,j)):
+            elif passageEst(getVal(plateau,i,j),getVal(plateau,i+1,j)):
                 setVal(calque,i+1,j,marque)
-                estMarqué = True
+                estMarque = True
 
             # Vérification voisin de gauche
-            elif passageOuest(getVal(plateau[0],i,j),getVal(plateau[0],i,j+1)):
+            elif passageOuest(getVal(plateau,i,j),getVal(plateau,i,j+1)):
                 setVal(calque,i-1,j,marque)
-                estMarqué = True
+                estMarque = True
 
-    return estMarqué
+    return estMarque
+
 
 def accessible(plateau,ligD,colD,ligA,colA):
     """
@@ -197,15 +213,15 @@ def accessible(plateau,ligD,colD,ligA,colA):
     résultat: un boolean indiquant s'il existe un chemin entre la case de départ
               et la case d'arrivée
     """
-    nbLigne = getNbLignes(plateau[0])
-    nbCol = getNbColonnes(plateau[0])
+    nbLigne = getNbLignes(plateau)
+    nbCol = getNbColonnes(plateau)
     calque=Matrice(nbLigne,nbCol)
     setVal(calque,ligD,colD,1)
 
     estMarqué = True
 
     while estMarqué:
-        estMarqué = marquageDirect(calque,plateau[0],1,1)
+        estMarqué = marquageDirect(calque,plateau,1,1)
 
     if getVal(calque,ligD,colD) > 0 and getVal(calque,ligA,colA) > 0 :
         return True
@@ -229,6 +245,12 @@ def accessibleDist(plateau,ligD,colD,ligA,colA):
     pass
 
 
-plateau = Plateau(4,24)
+def affichePlateau(plateau) :
+    p = plateau[0]
+    for lig in range(getNbLignes(p)) :
+        for col in range(getNbColonnes(p)) :
+            print('carte[', lig, '][', col, '] : ', p[lig][col])
+        print('\n\n')
 
-print(accessible(plateau,0,0,1,1))
+p = Plateau(2,35)
+affichePlateau(p)
