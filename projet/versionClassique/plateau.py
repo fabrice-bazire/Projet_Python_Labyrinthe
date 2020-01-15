@@ -57,6 +57,7 @@ def Plateau(nbJoueurs, nbTresors):
     setVal(plateau, 6, 4, Carte(False, False, True, False, les_tresors[0]))
     les_tresors.pop(0)
     setVal(plateau, 4, 0, Carte(False, False, False, True, les_tresors[0]))
+    les_tresors.pop(0)
     les_cartes_amovibles = creerCartesAmovibles(14, nbTresors)
     for lig in range(getNbLignes(plateau)) :
         for col in range(getNbColonnes(plateau)) :
@@ -64,6 +65,7 @@ def Plateau(nbJoueurs, nbTresors):
                 setVal(plateau, lig, col, les_cartes_amovibles[0])
                 les_cartes_amovibles.pop(0)
     return (plateau, 0)
+
 
 def creerCartesAmovibles(tresorDebut,nbTresors):
     """
@@ -96,6 +98,7 @@ def creerCartesAmovibles(tresorDebut,nbTresors):
         i+=1
     random.shuffle(liste)
     return liste
+
 
 def prendreTresorPlateau(plateau,lig,col,numTresor):
     """
@@ -175,29 +178,39 @@ def marquageDirect(calque,plateau,val,marque):
     nbCol = getNbColonnes(plateau)
     estMarque = False
 
+
     for i in range (nbLigne):
 
         for j in range(nbCol):
 
             # Vérification voisin du dessous
-            if passageSud(getVal(plateau,i,j),getVal(plateau,i,j+1)):
-                setVal(calque,i,j,marque)
-                estMarque = True
-                #positionActuel = position de la carte sud
+            if (i + 1) < getNbLignes(plateau):
+                if getVal(calque, (i + 1) , j) > 0 and getVal(calque, i , j) == 0 :
+                    if passageSud(getVal(plateau,i,j),getVal(plateau,i+1,j)):
+                        setVal(calque,i,j,marque)
+                        estMarque = True
+
 
             # Vérification voisin du dessus
-            elif passageNord(getVal(plateau,i,j),getVal(plateau,i,j-1)):
-                setVal(calque,i,j-1,marque)
-                estMarque = True
+            if (i - 1) >= 0 :
+                if getVal(calque, (i-1),j) > 0 and getVal(calque, i , j) == 0 :
+                    if passageNord(getVal(plateau,i,j),getVal(plateau,i-1,j)):
+                        setVal(calque,i,j,marque)
+                        estMarque = True
+
             # Vérification voisin de droite
-            elif passageEst(getVal(plateau,i,j),getVal(plateau,i+1,j)):
-                setVal(calque,i+1,j,marque)
-                estMarque = True
+            if (j + 1) < getNbColonnes(plateau):
+                if getVal(calque, i, (j+1)) > 0 and getVal(calque, i , j) == 0 :
+                    if passageEst(getVal(plateau,i,j),getVal(plateau,i,j+1)):
+                        setVal(calque,i,j,marque)
+                        estMarque = True
 
             # Vérification voisin de gauche
-            elif passageOuest(getVal(plateau,i,j),getVal(plateau,i,j+1)):
-                setVal(calque,i-1,j,marque)
-                estMarque = True
+            if (j - 1) >= 0:
+                if getVal(calque, i, (j-1)) > 0 and getVal(calque, i , j) == 0 :
+                    if passageOuest(getVal(plateau,i,j),getVal(plateau,i,j-1)):
+                        setVal(calque,i,j,marque)
+                        estMarque = True
 
     return estMarque
 
@@ -216,17 +229,65 @@ def accessible(plateau,ligD,colD,ligA,colA):
     nbLigne = getNbLignes(plateau)
     nbCol = getNbColonnes(plateau)
     calque=Matrice(nbLigne,nbCol)
-    setVal(calque,ligD,colD,1)
+    setVal(calque,0,0,1)
 
-    estMarqué = True
+    boucle = True
+    while boucle:
+        boucle = marquageDirect(calque,plateau,1,1)
 
-    while estMarqué:
-        estMarqué = marquageDirect(calque,plateau,1,1)
+    return getVal(calque,ligD,colD) > 0 and getVal(calque,ligA,colA) > 0
 
-    if getVal(calque,ligD,colD) > 0 and getVal(calque,ligA,colA) > 0 :
-        return True
-    else:
-        return False
+
+def marquageDirect2(calque,plateau):
+    """
+    marque avec la valeur marque les éléments du calque tel que la valeur
+    correspondante n'est pas un mur (de valeur differente de 1) et
+    qu'un de ses voisins dans le calque à pour valeur val
+    la fonction doit retourner True si au moins une case du calque a été marquée
+    """
+    nbLigne = getNbLignes(plateau)
+    nbCol = getNbColonnes(plateau)
+    marquageFait = False
+
+    for i in range (nbLigne):
+
+        for j in range(nbCol):
+
+            # Vérification voisin du dessous
+            if (i + 1) < getNbLignes(plateau):
+                val = getVal(calque,i+1,j)
+                if getVal(calque, (i + 1) , j) > 0 and getVal(calque, i , j) == 0 :
+                    if passageSud(getVal(plateau,i,j),getVal(plateau,i+1,j)):
+                        setVal(calque,i,j,val+1)
+                        marquageFait = True
+
+
+            # Vérification voisin du dessus
+            if (i - 1) >= 0 :
+                val = getVal(calque,i-1,j)
+                if getVal(calque, (i-1),j) > 0 and getVal(calque, i , j) == 0 :
+                    if passageNord(getVal(plateau,i,j),getVal(plateau,i-1,j)):
+                        setVal(calque,i,j,val+1)
+                        marquageFait = True
+
+            # Vérification voisin de droite
+            if (j + 1) < getNbColonnes(plateau):
+                val = getVal(calque,i,j+1)
+                if getVal(calque, i, (j+1)) > 0 and getVal(calque, i , j) == 0 :
+                    if passageEst(getVal(plateau,i,j),getVal(plateau,i,j+1)):
+                        setVal(calque,i,j,val+1)
+                        marquageFait = True
+
+            # Vérification voisin de gauche
+            if (j - 1) >= 0:
+                val = getVal(calque,i,j-1)
+                if getVal(calque, i, (j-1)) > 0 and getVal(calque, i , j) == 0 :
+                    if passageOuest(getVal(plateau,i,j),getVal(plateau,i,j-1)):
+                        setVal(calque,i,j,val+1)
+                        marquageFait = True
+
+    return marquageFait
+
 
 def accessibleDist(plateau,ligD,colD,ligA,colA):
     """
@@ -242,15 +303,59 @@ def accessibleDist(plateau,ligD,colD,ligA,colA):
     résultat: une liste de coordonées indiquant un chemin possible entre la case
               de départ et la case d'arrivée
     """
-    pass
+
+    if accessible(plateau,ligD,colD,ligA,colA):
+
+        calque=Matrice(getNbLignes(plateau),getNbColonnes(plateau))
+        liste_coordonees = [(ligA,colA)]
+        setVal(calque,0,0,1)
 
 
-def affichePlateau(plateau) :
-    p = plateau[0]
-    for lig in range(getNbLignes(p)) :
-        for col in range(getNbColonnes(p)) :
-            print('carte[', lig, '][', col, '] : ', p[lig][col])
+        tour = True
+        while tour:
+            tour = marquageDirect2(calque,plateau)
+        val = getVal(calque,ligA,colA)
+
+        affiche_matrice(calque)
+
+        # Tant que les lig et col ne sont pas egales
+        while ligD != ligA or colD != colA:
+
+            #Vérification voisin du dessus
+            if ligA - 1 >= 0 and getVal(calque,ligA,colA) == getVal(calque,ligA - 1,colA):
+                    liste_coordonees.append((ligA,colA))
+                    val = getVal(calque,ligA - 1,colA)
+
+            #Vérification voisin du dessous
+            if ligA + 1 < getNbLignes(calque) and getVal(calque,ligA,colA) == getVal(calque,ligA + 1,colA):
+                    liste_coordonees.append((ligA,colA))
+                    val = getVal(calque,ligA + 1,colA)
+
+            #Vérification voisin de gauche
+            if colA - 1 >= 0 and getVal(calque,ligA,colA) == getVal(calque,ligA,colA - 1):
+                    liste_coordonees.append((ligA,colA))
+                    val = getVal(calque,ligA,colA - 1)
+
+            #Vérification voisin du droite
+            if colA + 1 < getNbColonnes(calque) and getVal(calque,ligA,colA) == getVal(calque,ligA,colA + 1):
+                    liste_coordonees.append((ligA,colA))
+                    val = getVal(calque,ligA,colA + 1)
+
+            print(liste_coordonees)
+            return liste_coordonees
+    else:
+        return []
+
+
+def affichePlateau(plateau):
+    for lig in range(getNbLignes(plateau)) :
+        for col in range(getNbColonnes(plateau)) :
+            print('carte[', lig, '][', col, '] : ', plateau[lig][col])
         print('\n\n')
 
-p = Plateau(2,35)
-affichePlateau(p)
+p,_ = Plateau(4,24)
+print(accessible(p,0,0,4,3))
+print(accessibleDist(p,0,0,4,3))
+#affiche_matrice(accessible(p,0,0,0,3))
+
+#affichePlateau(p)

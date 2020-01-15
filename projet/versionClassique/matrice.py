@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-                           Projet Labyrinthe 
+                           Projet Labyrinthe
         Projet Python 2019-2020 de 1ere année et AS DUT Informatique Orléans
-        
+
    Module matrice
    ~~~~~~~~~~~~~~~
-   
-   Ce module gère une matrice. 
+
+   Ce module gère une matrice.
 """
 
 #-----------------------------------------
@@ -15,9 +15,9 @@
 
 def Matrice(nbLignes,nbColonnes,valeurParDefaut=0):
     """
-    crée une matrice de nbLignes lignes sur nbColonnes colonnes en mettant 
+    crée une matrice de nbLignes lignes sur nbColonnes colonnes en mettant
     valeurParDefaut dans chacune des cases
-    paramètres: 
+    paramètres:
       nbLignes un entier strictement positif qui indique le nombre de lignes
       nbColonnes un entier strictement positif qui indique le nombre de colonnes
       valeurParDefaut la valeur par défaut
@@ -74,13 +74,10 @@ def setVal(matrice,ligne,colonne,valeur):
                 valeur la valeur à stocker dans la matrice
     cette fonction ne retourne rien mais modifie la matrice
     """
-    liste=matrice
-    liste[ligne].pop(colonne)
-    liste[ligne].insert(colonne,valeur)
-    matrice=liste
+    matrice[ligne][colonne]=valeur
 
 
-#------------------------------------------        
+#------------------------------------------
 # decalages
 #------------------------------------------
 def decalageLigneAGauche(matrice, numLig, nouvelleValeur=0):
@@ -154,7 +151,7 @@ def decalageColonneEnBas(matrice, numCol, nouvelleValeur=0):
 
 
 def afficheLigneSeparatrice(matrice,tailleCellule=4):
-    ''' 
+    '''
     fonction annexe pour afficher les lignes séparatrices
     paramètres: matrice la matrice à afficher
                 tailleCellule la taille en nb de caractères d'une cellule
