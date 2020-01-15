@@ -310,52 +310,64 @@ def accessibleDist(plateau,ligD,colD,ligA,colA):
         liste_coordonees = [(ligA,colA)]
         setVal(calque,0,0,1)
 
-
         tour = True
         while tour:
             tour = marquageDirect2(calque,plateau)
         val = getVal(calque,ligA,colA)
 
-        affiche_matrice(calque)
+        # Test d'affichage
+        #affiche_matrice(calque)
 
         # Tant que les lig et col ne sont pas egales
-        while ligD != ligA or colD != colA:
+        while ligD != ligA and colD != colA:
 
             #Vérification voisin du dessus
-            if ligA - 1 >= 0 and getVal(calque,ligA,colA) == getVal(calque,ligA - 1,colA):
+            if ligA - 1 >= 0 and getVal(calque,ligA,colA)-1 == getVal(calque,ligA - 1,colA):
                     liste_coordonees.append((ligA,colA))
                     val = getVal(calque,ligA - 1,colA)
 
+                    ligA -= 1
+
             #Vérification voisin du dessous
-            if ligA + 1 < getNbLignes(calque) and getVal(calque,ligA,colA) == getVal(calque,ligA + 1,colA):
+            if ligA + 1 < getNbLignes(calque) and getVal(calque,ligA,colA)-1 == getVal(calque,ligA + 1,colA):
                     liste_coordonees.append((ligA,colA))
                     val = getVal(calque,ligA + 1,colA)
 
+                    ligA += 1
+
             #Vérification voisin de gauche
-            if colA - 1 >= 0 and getVal(calque,ligA,colA) == getVal(calque,ligA,colA - 1):
+            if colA - 1 >= 0 and getVal(calque,ligA,colA)-1 == getVal(calque,ligA,colA - 1):
                     liste_coordonees.append((ligA,colA))
                     val = getVal(calque,ligA,colA - 1)
 
+                    colA -= 1
+
             #Vérification voisin du droite
-            if colA + 1 < getNbColonnes(calque) and getVal(calque,ligA,colA) == getVal(calque,ligA,colA + 1):
+            if colA + 1 < getNbColonnes(calque) and getVal(calque,ligA,colA)-1 == getVal(calque,ligA,colA + 1):
                     liste_coordonees.append((ligA,colA))
                     val = getVal(calque,ligA,colA + 1)
 
-            print(liste_coordonees)
+                    colA += 1
+
+            liste_coordonees.reverse()
             return liste_coordonees
     else:
         return []
 
 
+
+#---------------------------------------------------------------------------#
 def affichePlateau(plateau):
     for lig in range(getNbLignes(plateau)) :
         for col in range(getNbColonnes(plateau)) :
             print('carte[', lig, '][', col, '] : ', plateau[lig][col])
         print('\n\n')
 
-p,_ = Plateau(4,24)
-print(accessible(p,0,0,4,3))
-print(accessibleDist(p,0,0,4,3))
+
+
+#p,_ = Plateau(4,24)
+#print(accessible(p,0,0,2,1))
+#print(accessibleDist(p,0,0,2,1))
 #affiche_matrice(accessible(p,0,0,0,3))
 
 #affichePlateau(p)
