@@ -57,15 +57,13 @@ def Plateau(nbJoueurs, nbTresors):
     setVal(plateau, 6, 4, Carte(False, False, True, False, les_tresors[0]))
     les_tresors.pop(0)
     setVal(plateau, 4, 0, Carte(False, False, False, True, les_tresors[0]))
-    les_tresors.pop(0)
     les_cartes_amovibles = creerCartesAmovibles(14, nbTresors)
     for lig in range(getNbLignes(plateau)) :
         for col in range(getNbColonnes(plateau)) :
             if lig % 2 == 1 or col % 2 == 1 :
                 setVal(plateau, lig, col, les_cartes_amovibles[0])
                 les_cartes_amovibles.pop(0)
-    return (plateau, 0)
-
+    return (plateau, les_cartes_amovibles[0])
 
 def creerCartesAmovibles(tresorDebut,nbTresors):
     """
@@ -99,7 +97,6 @@ def creerCartesAmovibles(tresorDebut,nbTresors):
     random.shuffle(liste)
     return liste
 
-
 def prendreTresorPlateau(plateau,lig,col,numTresor):
     """
     prend le tresor numTresor qui se trouve sur la carte en lin,col du plateau
@@ -111,14 +108,14 @@ def prendreTresorPlateau(plateau,lig,col,numTresor):
                 numTresor: le numéro du trésor à prendre sur la carte
     resultat: un booléen indiquant si le trésor était bien sur la carte considérée
     """
-    if plateau[lig][col]['tresor'] == numTresor :
-        plateau[lig][col]['tresor'] = 0
+    if plateau[0][lig][col]['tresor'] == numTresor :
+        plateau[0][lig][col]['tresor'] = 0
         return True
     else :
         return False
 
 def getCoordonneesTresor(plateau,numTresor):
-    """"
+    """
     retourne les coordonnées sous la forme (lig,col) du trésor passé en paramètre
     paramètres: plateau: le plateau considéré
                 numTresor: le numéro du trésor à trouver
@@ -127,7 +124,7 @@ def getCoordonneesTresor(plateau,numTresor):
     """
     for ligne in range(7):
         for colonne in range(7):
-            if plateau[ligne][colonne]['tresor'] == numTresor :
+            if plateau[0][ligne][colonne]['tresor'] == numTresor :
                 return (ligne, colonne)
     return None
 
@@ -141,7 +138,7 @@ def getCoordonneesJoueur(plateau,numJoueur):
     """
     for ligne in range(7):
         for colonne in range(7):
-            if numJoueur in plateau[ligne][colonne]['pions']:
+            if numJoueur in plateau[0][ligne][colonne]['pions']:
                 return (ligne, colonne)
     return None
 
@@ -154,7 +151,7 @@ def prendrePionPlateau(plateau,lin,col,numJoueur):
                 numJoueur: le numéro du joueur qui correspond au pion
     Cette fonction ne retourne rien mais elle modifie le plateau
     """
-    plateau[lin][col]['pions'].pop(numJoueur)
+    plateau[0][lin][col]['pions'].pop(numJoueur)
 
 def poserPionPlateau(plateau,lin,col,numJoueur):
     """
@@ -165,7 +162,8 @@ def poserPionPlateau(plateau,lin,col,numJoueur):
                 numJoueur: le numéro du joueur qui correspond au pion
     Cette fonction ne retourne rien mais elle modifie le plateau
     """
-    plateau[lin][col]['pions'].append(numJoueur)
+    plateau[0][lin][col]['pions'].append(numJoueur)
+
 
 def marquageDirect(calque,plateau,val,marque):
     """
