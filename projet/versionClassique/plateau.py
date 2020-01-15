@@ -182,7 +182,7 @@ def marquageDirect(calque,plateau,val,marque):
         for j in range(nbCol):
 
             # Vérification voisin du dessous
-            if (i + 1) < getNbLignes(plateau):
+            if (i + 1) < nbLigne:
                 if getVal(calque, (i + 1) , j) > 0 and getVal(calque, i , j) == 0 :
                     if passageSud(getVal(plateau,i,j),getVal(plateau,i+1,j)):
                         setVal(calque,i,j,marque)
@@ -197,7 +197,7 @@ def marquageDirect(calque,plateau,val,marque):
                         estMarque = True
 
             # Vérification voisin de droite
-            if (j + 1) < getNbColonnes(plateau):
+            if (j + 1) < getNbColonnes:
                 if getVal(calque, i, (j+1)) > 0 and getVal(calque, i , j) == 0 :
                     if passageEst(getVal(plateau,i,j),getVal(plateau,i,j+1)):
                         setVal(calque,i,j,marque)
@@ -252,7 +252,7 @@ def marquageDirect2(calque,plateau):
         for j in range(nbCol):
 
             # Vérification voisin du dessous
-            if (i + 1) < getNbLignes(plateau):
+            if (i + 1) < nbLigne:
                 val = getVal(calque,i+1,j)
                 if getVal(calque, (i + 1) , j) > 0 and getVal(calque, i , j) == 0 :
                     if passageSud(getVal(plateau,i,j),getVal(plateau,i+1,j)):
@@ -269,7 +269,7 @@ def marquageDirect2(calque,plateau):
                         marquageFait = True
 
             # Vérification voisin de droite
-            if (j + 1) < getNbColonnes(plateau):
+            if (j + 1) < nbCol:
                 val = getVal(calque,i,j+1)
                 if getVal(calque, i, (j+1)) > 0 and getVal(calque, i , j) == 0 :
                     if passageEst(getVal(plateau,i,j),getVal(plateau,i,j+1)):

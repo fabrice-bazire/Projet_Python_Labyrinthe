@@ -98,9 +98,37 @@ class LabyrintheModeTexte(object):
         return xp,yp
 
     def saisirOrdre(self):
-        pass    
+        choix = input('Si vous voulez tournez la carte, vous pouvez taper 1, si vous voulez inserer, vous pouvez taper 2 : ')
+        if choix != 1 and choix != 2 :
+            return (-1, -1)
+        else : 
+            if choix == 1 :
+                return ('T','T')
+            else :
+                sens = input("Veuillez entrer le sens dans lequel insérer la carte (N, S, E, O) : ")
+                les_sens = ['N', 'S', 'E', 'O', 'n', 's', 'e', 'o']
+                if sens not in les_sens : 
+                    return (-1, -1)
+                rangee = input ("veuillez inserer la ligne d'insertion (1, 3 ou 5): ")
+                if rangee != 1 and rangee != 3 and rangee != 5 : 
+                    return (-1, -1)
+                if self.labyrinthe.coupInterdit(sens, rangee) :
+                    return (-1, -1)
+                else : 
+                    return (sens, rangee)
+
     def saisirDeplacement(self):
-        pass        
+        print("Vous allez indiquer les coordonnees de votre destination : ")
+        ligne = input("ligne : ")
+        colonne = input("colonne : ")
+        if ligne >= 0 and ligne < 7 and colonne < 7 and colonne >= 0 : 
+            joueur = self.labyrinthe.getNumJoueurCourant()
+            if joueur in self.labyrinthe.plateau[ligne][colonne].pions :
+                return (-1, -1)
+            else :
+                return (ligne, colonne)
+        else : 
+            return (-1, -1)        
             
 
     def main(self):
