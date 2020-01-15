@@ -162,7 +162,24 @@ def saisirOrdre(lmt):
               c'est à dire le numéro de la ligne ou de la colonne où insérer la carte
               si l'ordre saisi n'est pas valide la focntion retourne (-1,-1)
     """
-    pass
+    choix = input('Si vous voulez tournez la carte, vous pouvez taper 1, si vous voulez inserer, vous pouvez taper 2 : ')
+    if choix != 1 and choix != 2 :
+        return (-1, -1)
+    else : 
+        if choix == 1 :
+            return ('T','T')
+        else :
+            sens = input("Veuillez entrer le sens dans lequel insérer la carte (N, S, E, O) : ")
+            les_sens = ['N', 'S', 'E', 'O', 'n', 's', 'e', 'o']
+            if sens not in les_sens : 
+                return (-1, -1)
+            rangee = input ("veuillez inserer la ligne d'insertion (1, 3 ou 5): ")
+            if rangee != 1 and rangee != 3 and rangee != 5 : 
+                return (-1, -1)
+            if coupInterdit(lmt["labyrinthe"], sens, rangee) :
+                return (-1, -1)
+            else : 
+                return (sens, rangee)
 
 def saisirDeplacement(lmt):
     """
@@ -170,8 +187,18 @@ def saisirDeplacement(lmt):
     paramètre: lmt: une vue texte de labyrinthe
     résultat: un couple d'entier (lin,col) indiquant les coordonnées de la case destination. Si l'utilisateur a entré des coordonnées incorrecte la fonction retourne (-1,-1)
     """    
-    pass
-        
+    print("Vous allez indiquer les coordonnees de votre destination : ")
+    ligne = input("ligne : ")
+    colonne = input("colonne : ")
+    if ligne >= 0 and ligne < 7 and colonne < 7 and colonne >= 0 : 
+        joueur = getNumJoueurCourant(lmt["labyrinthe"])
+        if joueur in lmt["labyrinthe"]['plateau'][ligne][colonne]['pions'] :
+            return (-1, -1)
+        else :
+            return (ligne, colonne)
+    else : 
+        return (-1, -1)
+
 # demarre la partie en mode texte
 def demarrer(lmt):
     """
