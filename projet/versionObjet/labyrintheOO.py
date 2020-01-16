@@ -252,53 +252,81 @@ class Labyrinthe :
         return None
 
 
-#ARRET DE LA TRADUCTION EN ORIENTE OBJET !!!
-    def executerActionPhase1(labyrinthe,action,rangee):
-        """
-        exécute une action de jeu de la phase 1
-        paramètres: labyrinthe: le labyrinthe considéré
-                    action: un caractère indiquant l'action à effecter
-                            si action vaut 'T' => faire tourner la carte à jouer
-                            si action est une des lettres N E S O et rangee est un des chiffre 1,3,5
-                            => insèrer la carte à jouer à la direction action sur la rangée rangee
-                            et faire le nécessaire pour passer en phase 2
-        résultat: un entier qui vaut
-                0 si l'action demandée était valide et demandait de tourner la carte
-                1 si l'action demandée était valide et demandait d'insérer la carte
-                2 si l'action est interdite car l'opposée de l'action précédente
-                3 si action et rangee sont des entiers positifs
-                4 dans tous les autres cas
-        """
-        pass
-        #SaisirOrdre retourne (NSEO,135) (Nord Sud Est Ouest, 1 3 5)
+def executerActionPhase1(labyrinthe,action,rangee):
+    """
+    exécute une action de jeu de la phase 1
+    paramètres: labyrinthe: le labyrinthe considéré
+                action: un caractère indiquant l'action à effecter
+                        si action vaut 'T' => faire tourner la carte à jouer
+                        si action est une des lettres N E S O et rangee est un des chiffre 1,3,5
+                        => insèrer la carte à jouer à la direction action sur la rangée rangee
+                           et faire le nécessaire pour passer en phase 2
+    résultat: un entier qui vaut
+              0 si l'action demandée était valide et demandait de tourner la carte
+              1 si l'action demandée était valide et demandait d'insérer la carte
+              2 si l'action est interdite car l'opposée de l'action précédente
+              3 si action et rangee sont des entiers positifs
+              4 dans tous les autres cas
+    """
+    #labyrinthe['liste_joueurs']
+    res=4
+    if action=='T':
+        tournerHoraire(labyrinthe['carte_amovible'])
+        res=0
+    if rangee in [1,3,5]:
+        if action in ['N','S','E','O']:
+            if not coupInterdit(labyrinthe,direction,rangee):
+                jouerCarte(labyrinthe,direction,rangee)
+                res=1
+            else:
+                res=2
+        else : #rajout
+            res = 2  #rajout
+    else : #rajout
+        res = 2#rajout
+    if isinstance(action,int) and isinstance(rangee,int):
+        if action > 0 and rangee > 0 :  #rajout
+            res=3
+    return res
+     #SaisirOrdre retourne (NSEO,135) (Nord Sud Est Ouest, 1 3 5)
 
 
-    def accessibleDistJoueurCourant(labyrinthe, ligA,colA):
-        """
-        verifie si le joueur courant peut accéder la case ligA,colA
-        si c'est le cas la fonction retourne une liste représentant un chemin possible
-        sinon ce n'est pas le cas, la fonction retourne None
-        paramètres: labyrinthe le labyrinthe considéré
-                    ligA la ligne de la case d'arrivée
-                    colA la colonne de la case d'arrivée
-        résultat: une liste de couples d'entier représentant un chemin que le joueur
-                courant atteigne la case d'arrivée s'il existe None si pas de chemin
-        """
-        pass
+def accessibleDistJoueurCourant(labyrinthe, ligA,colA):
+    """
+    verifie si le joueur courant peut accéder la case ligA,colA
+    si c'est le cas la fonction retourne une liste représentant un chemin possible
+    sinon ce n'est pas le cas, la fonction retourne None
+    paramètres: labyrinthe le labyrinthe considéré
+                ligA la ligne de la case d'arrivée
+                colA la colonne de la case d'arrivée
+    résultat: une liste de couples d'entier représentant un chemin que le joueur
+              courant atteigne la case d'arrivée s'il existe None si pas de chemin
+    """
+    return accessibleDist(getCoordonneesJoueurCourant(labyrinthe),ligA,colA)
 
-    def finirTour(labyrinthe):
-        """
-        vérifie si le joueur courant vient de trouver un trésor (si oui fait le nécessaire)
-        vérifie si la partie est terminée, si ce n'est pas le cas passe au joueur suivant
-        paramètre: labyrinthe le labyrinthe considéré
-        résultat: un entier qui vaut
-                0 si le joueur courant n'a pas trouvé de trésor
-                1 si le joueur courant a trouvé un trésor mais la partie n'est pas terminée
-                2 si le joueur courant a trouvé son dernier trésor (la partie est donc terminée)
-        """
-        # Vérifie si trésor trouvé
-            # Si oui : attribuer nouveau trésor courant
-        # Retour phase 1
-        # changerJoueurCourant()
+def finirTour(labyrinthe):
+    """
+    vérifie si le joueur courant vient de trouver un trésor (si oui fait le nécessaire)
+    vérifie si la partie est terminée, si ce n'est pas le cas passe au joueur suivant
+    paramètre: labyrinthe le labyrinthe considéré
+    résultat: un entier qui vaut
+              0 si le joueur courant n'a pas trouvé de trésor
+              1 si le joueur courant a trouvé un trésor mais la partie n'est pas terminée
+              2 si le joueur courant a trouvé son dernier trésor (la partie est donc terminée)
+    """
+    # Vérifie si trésor trouvé
+        # Si oui : attribuer nouveau trésor courant
+    # Retour phase 1
+    # changerJoueurCourant()
+    if joueurCourantAFini(labyrinthe['liste_joueurs']):
+        return 2
 
-        pass
+    if getCoordonneesJoueurCourant(labyrinthe) == getCoordonneesTresorCourant(labyrinthe) :
+        res=1
+        tresorTrouve(labyrinthe['liste_joueurs'])
+        prochainTresor(labyrinthe['liste_joueurs'])
+        changerPhase(labyrinthe)
+    else:
+        res=0
+        changerJoueurCourant(labyrinthe['liste_joueurs'])
+    return res

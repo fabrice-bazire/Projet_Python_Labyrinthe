@@ -190,16 +190,16 @@ def jouerCarte(labyrinthe,direction,rangee):
     """
     if not coupInterdit(labyrinthe,direction,rangee):
         labyrinthe['dernier_coup']=[direction,rangee]
-        if direction='N':
+        if direction=='N':
             decalageColonneEnHaut(plateau,rangee,labyrinthe['carte_amovible'])
             labyrinthe['carte_amovible']=getVal(plateau,0,rangee)
-        if direction='S':
+        if direction=='S':
             decalageColonneEnBas(plateau,rangee,labyrinthe['carte_amovible'])
             labyrinthe['carte_amovible']=getVal(plateau,0,rangee)
-        if direction='E':
+        if direction=='E':
             decalageLigneAGauche(plateau,rangee,labyrinthe['carte_amovible'])
             labyrinthe['carte_amovible']=getVal(plateau,rangee,0)
-        if direction='O':
+        if direction=='O':
             decalageLigneADroite(plateau,rangee,labyrinthe['carte_amovible'])
             labyrinthe['carte_amovible']=getVal(plateau,rangee,0)
 
@@ -210,9 +210,9 @@ def tournerCarte(labyrinthe,sens='H'):
                 sens: un caractère indiquant le sens dans lequel tourner la carte
      Cette fonction ne retourne pas de résultat mais mais à jour le labyrinthe
     """
-    if sens = 'H':
+    if sens == 'H':
         tournerHoraire(labyrinthe['carte_amovible'])
-    if sens = 'A':
+    if sens == 'A':
         tournerAntiHoraire(labyrinthe['carte_amovible'])
 
 def getTresorCourant(labyrinthe):
@@ -271,8 +271,27 @@ def executerActionPhase1(labyrinthe,action,rangee):
               3 si action et rangee sont des entiers positifs
               4 dans tous les autres cas
     """
-    pass
-    #SaisirOrdre retourne (NSEO,135) (Nord Sud Est Ouest, 1 3 5)
+    #labyrinthe['liste_joueurs']
+    res=4
+    if action=='T':
+        tournerHoraire(labyrinthe['carte_amovible'])
+        res=0
+    if rangee in [1,3,5]:
+        if action in ['N','S','E','O']:
+            if not coupInterdit(labyrinthe,direction,rangee):
+                jouerCarte(labyrinthe,direction,rangee)
+                res=1
+            else:
+                res=2
+        else : #rajout
+            res = 2  #rajout
+    else : #rajout
+        res = 2#rajout
+    if isinstance(action,int) and isinstance(rangee,int):
+        if action > 0 and rangee > 0 :  #rajout
+            res=3
+    return res
+     #SaisirOrdre retourne (NSEO,135) (Nord Sud Est Ouest, 1 3 5)
 
 
 def accessibleDistJoueurCourant(labyrinthe, ligA,colA):
@@ -286,7 +305,7 @@ def accessibleDistJoueurCourant(labyrinthe, ligA,colA):
     résultat: une liste de couples d'entier représentant un chemin que le joueur
               courant atteigne la case d'arrivée s'il existe None si pas de chemin
     """
-    pass
+    return accessibleDist(getCoordonneesJoueurCourant(labyrinthe),ligA,colA)
 
 def finirTour(labyrinthe):
     """
@@ -302,5 +321,15 @@ def finirTour(labyrinthe):
         # Si oui : attribuer nouveau trésor courant
     # Retour phase 1
     # changerJoueurCourant()
+    if joueurCourantAFini(labyrinthe['liste_joueurs']):
+        return 2
 
-    pass
+    if getCoordonneesJoueurCourant(labyrinthe) == getCoordonneesTresorCourant(labyrinthe) :
+        res=1
+        tresorTrouve(labyrinthe['liste_joueurs'])
+        prochainTresor(labyrinthe['liste_joueurs'])
+        changerPhase(labyrinthe)
+    else:
+        res=0
+        changerJoueurCourant(labyrinthe['liste_joueurs'])
+    return res
