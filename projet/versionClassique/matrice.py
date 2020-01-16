@@ -74,11 +74,11 @@ def setVal(matrice,ligne,colonne,valeur):
                 valeur la valeur à stocker dans la matrice
     cette fonction ne retourne rien mais modifie la matrice
     """
-    liste=matrice
-    liste[ligne].pop(colonne)
-    liste[ligne].insert(colonne,valeur)
-    matrice=liste
-
+    #liste=matrice
+    #liste[ligne].pop(colonne)
+    #liste[ligne].insert(colonne,valeur)
+    #matrice=liste
+    matrice[ligne][colonne] = valeur
 
 #------------------------------------------        
 # decalages

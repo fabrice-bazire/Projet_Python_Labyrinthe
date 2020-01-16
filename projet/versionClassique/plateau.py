@@ -11,59 +11,6 @@
 
 from matrice import *
 from carte import *
-
-def Plateau(nbJoueurs, nbTresors):
-    """
-    créer un nouveau plateau contenant nbJoueurs et nbTrésors
-    paramètres: nbJoueurs le nombre de joueurs (un nombre entre 1 et 4)
-                nbTresors le nombre de trésor à placer (un nombre entre 1 et 49)
-    resultat: un couple contenant
-              - une matrice de taille 7x7 représentant un plateau de labyrinthe où les cartes
-                ont été placée de manière aléatoire
-              - la carte amovible qui n'a pas été placée sur le plateau
-    """
-    les_tresors = []
-    for indice in range(13) :
-        les_tresors.append(indice+1)
-    random.shuffle(les_tresors)
-    plateau = Matrice(7,7)
-    setVal(plateau,0,0,Carte(True, False, False, True))
-    setVal(plateau,0,6,Carte(True, True, False, False))
-    setVal(plateau,6,0,Carte(False, False, True, True))
-    setVal(plateau,6,6,Carte(False, True, True, False))
-    setVal(plateau, 0, 2, Carte(True, False, False, False, les_tresors[0]))
-    les_tresors.pop(0)
-    setVal(plateau, 0, 4, Carte(True, False, False, False, les_tresors[0]))
-    les_tresors.pop(0)
-    setVal(plateau, 2, 4, Carte(True, False, False, False, les_tresors[0]))
-    les_tresors.pop(0)
-    setVal(plateau, 2, 0, Carte(False, False, False, True, les_tresors[0]))
-    les_tresors.pop(0)
-    setVal(plateau, 2, 2, Carte(False, False, False, True, les_tresors[0]))
-    les_tresors.pop(0)
-    setVal(plateau, 2, 4, Carte(False, False, False, True, les_tresors[0]))
-    les_tresors.pop(0)
-    setVal(plateau, 2, 6, Carte(False, True, False, False, les_tresors[0]))
-    les_tresors.pop(0)
-    setVal(plateau, 4, 6, Carte(False, True, False, False, les_tresors[0]))
-    les_tresors.pop(0)
-    setVal(plateau, 4, 4, Carte(False, True, False, False, les_tresors[0]))
-    les_tresors.pop(0)
-    setVal(plateau, 4, 2, Carte(False, False, True, False, les_tresors[0]))
-    les_tresors.pop(0)
-    setVal(plateau, 6, 2, Carte(False, False, True, False, les_tresors[0]))
-    les_tresors.pop(0)
-    setVal(plateau, 6, 4, Carte(False, False, True, False, les_tresors[0]))
-    les_tresors.pop(0)
-    setVal(plateau, 4, 0, Carte(False, False, False, True, les_tresors[0]))
-    les_cartes_amovibles = creerCartesAmovibles(14, nbTresors)
-    for lig in range(getNbLignes(plateau)) : 
-        for col in range(getNbColonnes(plateau)) :
-            if lig % 2 == 1 or col % 2 == 1 : 
-                setVal(plateau, lig, col, les_cartes_amovibles[0])
-                les_cartes_amovibles.pop(0) 
-    return (plateau, les_cartes_amovibles[0])
-
 def creerCartesAmovibles(tresorDebut,nbTresors):
     """
     fonction utilitaire qui permet de créer les cartes amovibles du jeu en y positionnant
@@ -95,6 +42,67 @@ def creerCartesAmovibles(tresorDebut,nbTresors):
         i+=1
     random.shuffle(liste)
     return liste
+
+def Plateau(nbJoueurs, nbTresors):
+    """
+    créer un nouveau plateau contenant nbJoueurs et nbTrésors
+    paramètres: nbJoueurs le nombre de joueurs (un nombre entre 1 et 4)
+                nbTresors le nombre de trésor à placer (un nombre entre 1 et 49)
+    resultat: un couple contenant
+              - une matrice de taille 7x7 représentant un plateau de labyrinthe où les cartes
+                ont été placée de manière aléatoire
+              - la carte amovible qui n'a pas été placée sur le plateau
+    """
+    les_tresors = []
+    for indice in range(13) :
+        les_tresors.append(indice+1)
+    random.shuffle(les_tresors)
+    plateau = Matrice(7,7)
+    setVal(plateau,0,0,Carte(True, False, False, True, 0, []))
+    poserPionPlateau(plateau,0,0,1)
+    setVal(plateau,0,6,Carte(True, True, False, False, 0, []))
+    if nbJoueurs > 1 :
+        poserPionPlateau(plateau,0,6,2)
+    setVal(plateau,6,0,Carte(False, False, True, True, 0, []))
+    if nbJoueurs > 2 :
+        poserPionPlateau(plateau,6,0,3)
+    setVal(plateau,6,6,Carte(False, True, True, False, 0, []))
+    if nbJoueurs > 3 :
+        poserPionPlateau(plateau,6,6,4)
+    setVal(plateau, 0, 2, Carte(True, False, False, False, les_tresors[0], []))
+    les_tresors.pop(0)
+    setVal(plateau, 0, 4, Carte(True, False, False, False, les_tresors[0], []))
+    les_tresors.pop(0)
+    setVal(plateau, 2, 4, Carte(True, False, False, False, les_tresors[0], []))
+    les_tresors.pop(0)
+    setVal(plateau, 2, 0, Carte(False, False, False, True, les_tresors[0], []))
+    les_tresors.pop(0)
+    setVal(plateau, 2, 2, Carte(False, False, False, True, les_tresors[0], []))
+    les_tresors.pop(0)
+    setVal(plateau, 2, 4, Carte(False, False, False, True, les_tresors[0], []))
+    les_tresors.pop(0)
+    setVal(plateau, 2, 6, Carte(False, True, False, False, les_tresors[0], []))
+    les_tresors.pop(0)
+    setVal(plateau, 4, 6, Carte(False, True, False, False, les_tresors[0], []))
+    les_tresors.pop(0)
+    setVal(plateau, 4, 4, Carte(False, True, False, False, les_tresors[0], []))
+    les_tresors.pop(0)
+    setVal(plateau, 4, 2, Carte(False, False, True, False, les_tresors[0], []))
+    les_tresors.pop(0)
+    setVal(plateau, 6, 2, Carte(False, False, True, False, les_tresors[0], []))
+    les_tresors.pop(0)
+    setVal(plateau, 6, 4, Carte(False, False, True, False, les_tresors[0], []))
+    les_tresors.pop(0)
+    setVal(plateau, 4, 0, Carte(False, False, False, True, les_tresors[0], []))
+    les_cartes_amovibles = creerCartesAmovibles(13, nbTresors)
+    for lig in range(getNbLignes(plateau)) : 
+        for col in range(getNbColonnes(plateau)) :
+            if lig % 2 == 1 or col % 2 == 1 : 
+                setVal(plateau, lig, col, les_cartes_amovibles[0])
+                les_cartes_amovibles.pop(0) 
+    return [plateau, les_cartes_amovibles[0]]
+
+
 
 def prendreTresorPlateau(plateau,lig,col,numTresor):
     """
@@ -161,7 +169,7 @@ def poserPionPlateau(plateau,lin,col,numJoueur):
                 numJoueur: le numéro du joueur qui correspond au pion
     Cette fonction ne retourne rien mais elle modifie le plateau
     """
-    plateau[0][lin][col]['pions'].append(numJoueur)
+    plateau[lin][col]['pions'].append(numJoueur)
 
 
 def marquageDirect(calque,plateau,val,marque):
@@ -337,8 +345,6 @@ def accessibleDist(plateau,ligD,colD,ligA,colA):
             if colA + 1 < getNbColonnes(calque) and getVal(calque,ligA,colA) == getVal(calque,ligA,colA + 1):
                     liste_coordonees.append((ligA,colA))
                     val = getVal(calque,ligA,colA + 1)
-
-            print(liste_coordonees)
             return liste_coordonees
     else:
         return []
@@ -347,12 +353,10 @@ def accessibleDist(plateau,ligD,colD,ligA,colA):
 def affichePlateau(plateau):
     for lig in range(getNbLignes(plateau)) :
         for col in range(getNbColonnes(plateau)) :
+            print("ligne : ", lig, " ; col : ", col)
             print('carte[', lig, '][', col, '] : ', plateau[lig][col])
         print('\n\n')
 
-p,_ = Plateau(4,24)
-print(accessible(p,0,0,4,3))
-print(accessibleDist(p,0,0,4,3))
-#affiche_matrice(accessible(p,0,0,0,3))
 
-#affichePlateau(p)
+#plateau_test = Plateau(1, 5)
+#affichePlateau(plateau_test)

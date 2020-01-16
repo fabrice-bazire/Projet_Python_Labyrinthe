@@ -63,12 +63,12 @@ def distribuerTresors(joueurs,nbTresors=24, nbTresorMax=0):
     random.shuffle(les_tresors)
     nb_joueurs = len(joueurs[0])
     if nbTresorMax == 0 :
-        while len(les_tresors) % nb_joueurs == O:
+        while len(les_tresors) >= nb_joueurs :
             for i in range(nb_joueurs) :
                 joueurs[0][i+1][1].append(les_tresors[0])
                 les_tresors.pop(0)
     else : 
-        while len(les_tresors) % nb_joueurs == 0 and nb_tresor_par_joueur < nbTresorMax :
+        while len(les_tresors) >= nb_joueurs and nb_tresor_par_joueur < nbTresorMax :
             for i in range(nb_joueurs) :
                 joueurs[0][i+1][1].append(les_tresors[0])
                 les_tresors.pop(0)
@@ -159,7 +159,10 @@ def tresorCourant(joueurs):
     paramètre: joueurs la liste des joueurs 
     résultat: le prochain trésor du joueur courant (un entier)
     """
-    return getJoueurCourant(joueurs)[1][0]
+    if getJoueurCourant(joueurs)[1] != [] :
+        return getJoueurCourant(joueurs)[1][0]
+    else : 
+        return 0
 
 def joueurCourantAFini(joueurs):
     """
